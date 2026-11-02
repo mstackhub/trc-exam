@@ -4342,60 +4342,66 @@
               }
             }
 
-            const systemPrompt = `คุณคือ "อาจารย์กาชาด AI" ติวเตอร์ผู้เชี่ยวชาญการสอบแข่งขันตำแหน่งเจ้าหน้าที่บริหารงานทั่วไป ระดับ 3-5 สภากาชาดไทย (อ้างอิงเนื้อหาคู่มือสอบ 240 หน้า) 
-จงตอบคำถามด้วยภาษาไทยที่สุภาพ อบอุ่น เป็นกันเอง ให้กำลังใจ ชัดเจน ตรงประเด็น และสรุปจุดสำคัญที่ชอบออกข้อสอบเสมอ เป็น bullet point สั้นกระชับ อ่านง่าย${contextSnippets}`;
+            const systemPrompt = `คุณคือ "อาจารย์กาชาด AI" ติวเตอร์ผู้เชี่ยวชาญการสอบแข่งขันสภากาชาดไทย (อ้างอิงเนื้อหาคู่มือสอบ 240 หน้า) 
+กฎเหล็กในการตอบ:
+1. ตอบตรงคำถามทันทีในบรรทัดแรกอย่างชัดเจนและแม่นยำที่สุด ตัวหนาคำตอบหลัก
+2. ห้ามเกริ่นอารัมภบท ไม่พูดซ้ำซ้อน ไม่ตอบยาวเกินจำเป็น
+3. ถ้าเป็นคำถามข้อเท็จจริง (เช่น ชื่อ, วันที่, จำนวนวัน, บุคคล) ให้ตอบสั้นกระชับ 1-3 บรรทัดพอ
+4. ให้ข้อมูลถูกต้องตามระเบียบและประวัติสภากาชาดไทยอย่างเคร่งครัด${contextSnippets}`;
 
-            // Try modern Gemini models with fallback
-            const models = ['gemini-3.5-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
-            let reply = null;
+            // Fast live call with timeout and zero thinking delay (thinkingBudget: 0 for 1-second response)
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-            for (const modelName of models) {
-              try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey.trim()}`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    contents: [
-                      { role: 'user', parts: [{ text: `${systemPrompt}\n\nคำถามจากลูกศิษย์: ${query}` }] }
-                    ]
-                  })
-                });
-
-                if (res.ok) {
-                  const data = await res.json();
-                  reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                  if (reply) break;
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey.trim()}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              signal: controller.signal,
+              body: JSON.stringify({
+                contents: [
+                  { role: 'user', parts: [{ text: `${systemPrompt}\n\nคำถาม: ${query}` }] }
+                ],
+                generationConfig: {
+                  temperature: 0.1,
+                  maxOutputTokens: 350,
+                  thinkingConfig: {
+                    thinkingBudget: 0
+                  }
                 }
-              } catch (err) {
-                console.warn(`[Gemini] model ${modelName} error:`, err);
+              })
+            });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+              const data = await res.json();
+              const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+              if (reply && reply.trim()) {
+                // Convert Markdown formatting to HTML
+                let formatted = reply.trim()
+                  .replace(/### (.*?)\n/g, '<h4 class="font-bold text-xs sm:text-sm text-purple-900 mt-2 mb-1">$1</h4>')
+                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                  .replace(/^\s*[-•]\s+(.*)$/gm, '<li class="ml-4 list-disc text-slate-700">$1</li>')
+                  .replace(/\n\n/g, '</p><p class="mt-1.5 text-slate-700 leading-relaxed">')
+                  .replace(/\n/g, '<br/>');
+
+                return `
+                  <div class="space-y-1 text-xs leading-relaxed text-slate-700 font-sarabun">
+                    <div class="inline-flex items-center gap-1 text-[10px] text-purple-700 font-prompt font-semibold bg-purple-50 px-2 py-0.5 rounded-full border border-purple-100 mb-1">
+                      <i data-lucide="sparkles" class="w-3 h-3 text-purple-600"></i> ตอบสดโดย Gemini 3.5 Flash
+                    </div>
+                    <p class="font-prompt text-slate-900 text-xs sm:text-sm">${formatted}</p>
+                  </div>
+                `;
               }
             }
-
-            if (reply) {
-              // Convert Markdown formatting to HTML
-              let formatted = reply
-                .replace(/### (.*?)\n/g, '<h4 class="font-bold text-xs sm:text-sm text-purple-900 mt-2 mb-1">$1</h4>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/^\s*[-•]\s+(.*)$/gm, '<li class="ml-4 list-disc text-slate-700">$1</li>')
-                .replace(/\n\n/g, '</p><p class="mt-2 text-slate-700 leading-relaxed">')
-                .replace(/\n/g, '<br/>');
-
-              return `
-                <div class="space-y-1.5 text-xs leading-relaxed text-slate-700 font-sarabun">
-                  <div class="inline-flex items-center gap-1 text-[10px] text-purple-700 font-prompt font-semibold bg-purple-50 px-2 py-0.5 rounded-full border border-purple-100 mb-1">
-                    <i data-lucide="sparkles" class="w-3 h-3 text-purple-600"></i> ตอบสดโดย Gemini 3.5 Flash
-                  </div>
-                  <p>${formatted}</p>
-                </div>
-              `;
-            }
           } catch (e) {
-            console.warn('Gemini API call failed, falling back to built-in knowledge engine', e);
+            console.warn('Gemini API call timed out or failed, falling back to instant built-in engine', e);
           }
         }
-        // Built-in Smart Knowledge Engine (100% Free & Offline)
-        await new Promise(r => setTimeout(r, 400));
+
+        // Built-in Smart Knowledge Engine (Instant & Offline 100%)
+        await new Promise(r => setTimeout(r, 60));
         return this.generateBuiltinKnowledgeAnswer(query);
       }
 
@@ -4634,6 +4640,75 @@
         const qMatch = this.findMatchingQuestion(query);
         if (qMatch && qMatch.match) {
           return this.formatQuestionAnswer(qMatch);
+        }
+
+        // 2.5 Direct Fast-Path Q&A (ตอบตรงประเด็นทันทีใน 1 ประโยค)
+        if (/ชื่อแรก|ชื่อเดิม|ชื่อก่อน/.test(q)) {
+          return `
+            <div class="space-y-1.5 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                ชื่อแรกของสภากาชาดไทย คือ <span class="text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 font-extrabold">"สภาอุณาโลมแดงแห่งชาติสยาม"</span>
+              </p>
+              <p class="text-slate-600 leading-relaxed text-[12px]">
+                สถาปนาเมื่อวันที่ <strong>26 เมษายน พ.ศ. 2436 (ร.ศ. 112)</strong> โดยมีท่านผู้หญิงเปลี่ยน ภาสกรวงษ์ เป็นผู้ริเริ่ม และพระบาทสมเด็จพระจุลจอมเกล้าเจ้าอยู่หัว (ร.5) ทรงเป็นพระบรมราชูปถัมภก
+              </p>
+              <div class="p-1.5 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 font-prompt text-[11px]">
+                💡 <strong>จุดออกสอบ:</strong> พ.ศ. 2449 เปลี่ยนเป็น <em>"สภากาชาดสยาม"</em> และ พ.ศ. 2482 เปลี่ยนเป็น <em>"สภากาชาดไทย"</em>
+              </div>
+            </div>
+          `;
+        }
+
+        if (/ผู้ริเริ่ม|ใครริเริ่ม|ใครก่อตั้ง|ผู้เริ่มคิด/.test(q)) {
+          return `
+            <div class="space-y-1.5 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                ผู้ริเริ่มจัดตั้งสภากาชาดไทย คือ <span class="text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 font-extrabold">"ท่านผู้หญิงเปลี่ยน ภาสกรวงษ์"</span>
+              </p>
+              <p class="text-slate-600 leading-relaxed text-[12px]">
+                ริเริ่มชักชวนสตรีไทยตั้งสภาอุณาโลมแดงเพื่อส่งยาและช่วยเหลือทหารบาดเจ็บในวิกฤตการณ์ ร.ศ. 112
+              </p>
+            </div>
+          `;
+        }
+
+        if (/สภานายิกา/.test(q)) {
+          return `
+            <div class="space-y-1.5 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                สภานายิกาพระองค์แรก คือ <span class="text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 font-extrabold">"สมเด็จพระศรีพัชรินทราบรมราชินีนาถ พระบรมราชชนนีพันปีหลวง"</span>
+              </p>
+              <p class="text-slate-600 leading-relaxed text-[12px]">
+                และสภานายิกาสภากาชาดไทยพระองค์ปัจจุบัน คือ <strong>สมเด็จพระนางเจ้าสิริกิติ์ พระบรมราชินีนาถ พระบรมราชชนนีพันปีหลวง</strong>
+              </p>
+            </div>
+          `;
+        }
+
+        if (/วันลาพักผ่อน|พักผ่อนสะสม|สะสมวันลา/.test(q)) {
+          return `
+            <div class="space-y-1.5 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                วันลาพักผ่อนสะสม (เกณฑ์ออกสอบสภากาชาดไทย):
+              </p>
+              <ul class="list-disc pl-4 text-slate-700 space-y-1 text-[12px]">
+                <li>สิทธิ์ประจำปี: <strong>ปีละ 10 วันทำการ</strong></li>
+                <li>อายุงานไม่ถึง 10 ปี: สะสมรวมได้สูงสุด <strong>20 วันทำการ</strong></li>
+                <li>อายุงาน 10 ปีขึ้นไป: สะสมรวมได้สูงสุด <strong>30 วันทำการ</strong></li>
+              </ul>
+            </div>
+          `;
+        }
+
+        if (/ลาคลอด/.test(q)) {
+          return `
+            <div class="space-y-1.5 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                วันลาคลอดบุตร: ลาได้ไม่เกิน <span class="text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 font-extrabold">98 วัน</span> (ได้รับค่าจ้าง 45 วัน)
+              </p>
+              <p class="text-slate-500 text-[11px]">⚠️ ข้อสอบชอบหลอก: 98 วันนี้นับรวมวันหยุดราชการด้วย</p>
+            </div>
+          `;
         }
 
         // 3. Red Cross History & Structure
