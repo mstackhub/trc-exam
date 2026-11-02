@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th" class="h-full bg-slate-50">
+<html lang="th" class="h-full bg-slate-50 overflow-x-hidden">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
@@ -85,7 +85,7 @@
     }
   </style>
 </head>
-<body class="h-full flex flex-col text-slate-800 antialiased selection:bg-redcross-100 selection:text-redcross-800">
+<body class="h-full flex flex-col text-slate-800 antialiased selection:bg-redcross-100 selection:text-redcross-800 overflow-x-hidden">
 
   <!-- TOP NAVBAR -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
@@ -103,8 +103,8 @@
         </div>
       </div>
 
-      <!-- Desktop Navigation Tabs (Hidden on mobile, visible on md+) -->
-      <div id="header-status" class="hidden md:flex items-center space-x-1 sm:space-x-2 py-0.5">
+      <!-- Desktop Navigation Tabs (Hidden on mobile/tablet, visible on lg+) -->
+      <div id="header-status" class="hidden lg:flex items-center space-x-1 sm:space-x-2 py-0.5">
         <nav class="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl text-xs sm:text-sm font-medium shrink-0">
           <button id="nav-btn-home" onclick="app.showScreen('welcome')" class="px-2.5 sm:px-3 py-1.5 rounded-lg transition-all bg-white text-slate-900 shadow-sm flex items-center gap-1 whitespace-nowrap shrink-0">
             <i data-lucide="book-open" class="w-3.5 h-3.5 text-redcross-600"></i>
@@ -136,8 +136,8 @@
         </button>
       </div>
 
-      <!-- Mobile Hamburger Button (Visible only on mobile < md) -->
-      <div class="flex items-center gap-1.5 md:hidden">
+      <!-- Mobile/Tablet Hamburger Button (Visible on screens < lg) -->
+      <div class="flex items-center gap-1.5 lg:hidden">
         <button id="btn-mobile-menu" onclick="app.toggleMobileMenu()" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors flex items-center justify-center shrink-0 shadow-2xs active:scale-95" aria-label="เปิดเมนูหลัก">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
@@ -760,32 +760,34 @@
     <section id="screen-flashcards" class="hidden flex-col h-full space-y-4 max-w-xl mx-auto w-full py-2">
       <!-- Flashcard Controls & Filters Header -->
       <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <button onclick="app.showScreen('welcome')" class="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1 font-medium font-prompt">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i> กลับหน้าหลัก
+        <div class="flex items-center justify-between gap-2 pb-1">
+          <button onclick="app.showScreen('welcome')" class="text-xs text-slate-600 hover:text-slate-900 flex items-center gap-1.5 font-medium font-prompt py-1 px-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>กลับหน้าหลัก</span>
           </button>
           
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 shrink-0">
             <!-- Shuffle Cards Button -->
-            <button onclick="app.shuffleFlashcardDeck()" class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-prompt flex items-center gap-1" title="สลับการ์ด">
-              <i data-lucide="shuffle" class="w-3.5 h-3.5"></i> สลับการ์ด
+            <button onclick="app.shuffleFlashcardDeck()" class="px-2.5 py-1 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-prompt flex items-center gap-1.5 transition-colors shadow-2xs active:scale-95 shrink-0" title="สลับการ์ด">
+              <i data-lucide="shuffle" class="w-3.5 h-3.5 text-slate-500"></i>
+              <span>สลับการ์ด</span>
             </button>
             <!-- Card Counter Badge -->
-            <span id="fc-counter-badge" class="text-xs font-mono font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg">
+            <span id="fc-counter-badge" class="text-xs font-mono font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-xl shrink-0">
               1 / 100
             </span>
           </div>
         </div>
 
-        <!-- Filter Row -->
-        <div class="flex items-center gap-2">
-          <select id="fc-category-select" onchange="app.onFlashcardCategoryChange(this.value)" class="text-xs font-prompt bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 flex-1 truncate focus:outline-none focus:ring-1 focus:ring-redcross-500">
+        <!-- Filter Row (Responsive Mobile Stack, Side-by-side on sm+) -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1 border-t border-slate-100">
+          <select id="fc-category-select" onchange="app.onFlashcardCategoryChange(this.value)" class="text-xs font-prompt bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 w-full sm:flex-1 truncate focus:outline-none focus:ring-2 focus:ring-redcross-500/30 focus:bg-white transition-all shadow-2xs">
             <option value="all">ทุกหมวดหมู่ (761 ข้อ)</option>
           </select>
 
           <!-- Toggle SRS Mode Only -->
-          <button id="btn-fc-srs-toggle" onclick="app.toggleFlashcardSRSFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-prompt flex items-center gap-1 shrink-0">
-            <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-amber-500"></i>
+          <button id="btn-fc-srs-toggle" onclick="app.toggleFlashcardSRSFilter()" class="px-3 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-prompt flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap transition-all shadow-2xs w-full sm:w-auto active:scale-95">
+            <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-indigo-600"></i>
             <span id="fc-srs-label">เฉพาะข้อที่ต้องทวน</span>
           </button>
         </div>
@@ -2793,11 +2795,12 @@
         const btn = document.getElementById('btn-fc-srs-toggle');
         const label = document.getElementById('fc-srs-label');
         if (!btn || !label) return;
+        const baseClass = 'px-3 py-2 rounded-xl text-xs font-prompt flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap transition-all shadow-2xs w-full sm:w-auto active:scale-95';
         if (this.flashcardSRSOnly) {
-          btn.className = 'px-2.5 py-1.5 rounded-lg border border-amber-400 bg-amber-50 text-amber-900 font-prompt text-xs flex items-center gap-1 shrink-0 font-semibold shadow-xs';
+          btn.className = `${baseClass} border border-indigo-400 bg-indigo-50 text-indigo-900 font-semibold`;
           label.innerText = 'เฉพาะข้อที่ต้องทวน (เปิดอยู่)';
         } else {
-          btn.className = 'px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-prompt flex items-center gap-1 shrink-0';
+          btn.className = `${baseClass} border border-slate-200 text-slate-700 bg-white hover:bg-slate-50`;
           label.innerText = 'เฉพาะข้อที่ต้องทวน';
         }
       }
