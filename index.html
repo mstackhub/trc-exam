@@ -1512,16 +1512,23 @@
 
       <div class="space-y-3 text-xs">
         <p class="text-slate-600 leading-relaxed font-sarabun">
-          ระบบ AI มาพร้อม <strong>ระบบจำลองอัจฉริยะ (Built-in Knowledge Engine)</strong> ที่ใช้งานได้ฟรี 100% โดยไม่ต้องต่อเน็ต
+          ระบบ AI มาพร้อม <strong>ระบบจำลองอัจฉริยะ (Built-in Knowledge Engine)</strong> ที่ใช้งานได้ฟรี 100% แม้ไม่มีอินเทอร์เน็ต และรองรับ <strong>Google Gemini API</strong> เพื่อการสนทนาสดแบบ Generative AI
         </p>
-        <div class="space-y-1.5 pt-2 border-t border-slate-100">
+        <div class="space-y-2 pt-2 border-t border-slate-100">
           <label class="font-prompt font-semibold text-slate-800 flex items-center justify-between">
-            <span>Gemini API Key (ไม่บังคับ / Optional):</span>
-            <span class="text-[10px] text-purple-600">ปลดล็อก AI สนทนาสด</span>
+            <span>Gemini API Key:</span>
+            <span id="ai-settings-status-badge" class="inline-flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium border border-emerald-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Gemini 3.5 Flash พร้อมใช้งาน
+            </span>
           </label>
-          <input type="password" id="input-gemini-key" placeholder="AIzaSy..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-purple-500">
-          <p class="text-[11px] text-slate-400 font-sarabun">
-            คีย์ของคุณจะถูกจัดเก็บเฉพาะในบราวเซอร์ของเครื่องคุณ (localStorage) อย่างปลอดภัย
+          <div class="relative">
+            <input type="password" id="input-gemini-key" placeholder="AQ... หรือ AIzaSy..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-purple-500 pr-10">
+            <button type="button" onclick="const el=document.getElementById('input-gemini-key'); el.type = el.type === 'password' ? 'text' : 'password';" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1" title="แสดง/ซ่อนคีย์">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 font-sarabun leading-relaxed">
+            เชื่อมต่อกับ Google Gemini API ตอบคำถามและชี้แนะสดตลอด 24 ชม. ข้อมูลคีย์จัดเก็บในอุปกรณ์ของคุณเท่านั้น
           </p>
         </div>
       </div>
@@ -4316,38 +4323,77 @@
       async processAIChatResponse(query) {
         const apiKey = localStorage.getItem('trc_gemini_api_key');
 
-        // If Gemini API Key exists, call live Gemini endpoint
+        // If Gemini API Key exists in localStorage, call live Gemini endpoint
         if (apiKey && apiKey.trim().length > 10) {
           try {
-            const systemPrompt = `คุณคือ "อาจารย์กาชาด AI" ติวเตอร์ผู้เชี่ยวชาญการสอบแข่งขันตำแหน่งเจ้าหน้าที่บริหารงานทั่วไป ระดับ 3-5 สภากาชาดไทย (อ้างอิงเนื้อหาคู่มือสอบ 240 หน้า) 
-จงตอบคำถามด้วยภาษาไทยที่สุภาพ อบอุ่น เป็นกันเอง ให้กำลังใจ ชัดเจน ตรงประเด็น และสรุปจุดสำคัญที่ชอบออกข้อสอบเสมอ`;
-
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey.trim()}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [
-                  { role: 'user', parts: [{ text: `${systemPrompt}\n\nคำถามจากลูกศิษย์: ${query}` }] }
-                ]
-              })
-            });
-
-            if (res.ok) {
-              const data = await res.json();
-              const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (reply) {
-                // Convert Markdown formatting to HTML
-                return reply
-                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                  .replace(/\n\n/g, '</p><p>')
-                  .replace(/\n/g, '<br/>');
+            // Check if user is asking about a specific question or keyword
+            let contextSnippets = '';
+            const matchQ = query.match(/(?:ข้อ|no\.?|question|#)\s*(\d+)/i) || query.match(/^(\d+)[\.\s]/);
+            if (matchQ) {
+              const qNum = parseInt(matchQ[1], 10);
+              const found = this.questionsPool.find(q => {
+                const idMatch = q.id && q.id.match(/_(\d+)$/);
+                const textMatch = q.question && q.question.match(/^(\d+)[\.\s]/);
+                return (idMatch && parseInt(idMatch[1], 10) === qNum) || (textMatch && parseInt(textMatch[1], 10) === qNum);
+              });
+              if (found) {
+                const correctOpt = found.options?.find(o => o.id === found.correctId);
+                contextSnippets = `\n[ข้อมูลจริงข้อสอบข้อที่ ${qNum} จากคู่มือสภากาชาดไทย 240 หน้า]:\n- โจทย์: ${found.question}\n- ตัวเลือกเฉลยที่ถูกต้อง: ${correctOpt ? correctOpt.text : ''}\n- สูตรลัด/จุดสังเกต: ${found.explanation?.keyRule || found.keyRule || ''}\n- สาระสำคัญ: ${found.explanation?.summary || ''}\n`;
               }
+            }
+
+            const systemPrompt = `คุณคือ "อาจารย์กาชาด AI" ติวเตอร์ผู้เชี่ยวชาญการสอบแข่งขันตำแหน่งเจ้าหน้าที่บริหารงานทั่วไป ระดับ 3-5 สภากาชาดไทย (อ้างอิงเนื้อหาคู่มือสอบ 240 หน้า) 
+จงตอบคำถามด้วยภาษาไทยที่สุภาพ อบอุ่น เป็นกันเอง ให้กำลังใจ ชัดเจน ตรงประเด็น และสรุปจุดสำคัญที่ชอบออกข้อสอบเสมอ เป็น bullet point สั้นกระชับ อ่านง่าย${contextSnippets}`;
+
+            // Try modern Gemini models with fallback
+            const models = ['gemini-3.5-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
+            let reply = null;
+
+            for (const modelName of models) {
+              try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey.trim()}`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    contents: [
+                      { role: 'user', parts: [{ text: `${systemPrompt}\n\nคำถามจากลูกศิษย์: ${query}` }] }
+                    ]
+                  })
+                });
+
+                if (res.ok) {
+                  const data = await res.json();
+                  reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                  if (reply) break;
+                }
+              } catch (err) {
+                console.warn(`[Gemini] model ${modelName} error:`, err);
+              }
+            }
+
+            if (reply) {
+              // Convert Markdown formatting to HTML
+              let formatted = reply
+                .replace(/### (.*?)\n/g, '<h4 class="font-bold text-xs sm:text-sm text-purple-900 mt-2 mb-1">$1</h4>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/^\s*[-•]\s+(.*)$/gm, '<li class="ml-4 list-disc text-slate-700">$1</li>')
+                .replace(/\n\n/g, '</p><p class="mt-2 text-slate-700 leading-relaxed">')
+                .replace(/\n/g, '<br/>');
+
+              return `
+                <div class="space-y-1.5 text-xs leading-relaxed text-slate-700 font-sarabun">
+                  <div class="inline-flex items-center gap-1 text-[10px] text-purple-700 font-prompt font-semibold bg-purple-50 px-2 py-0.5 rounded-full border border-purple-100 mb-1">
+                    <i data-lucide="sparkles" class="w-3 h-3 text-purple-600"></i> ตอบสดโดย Gemini 3.5 Flash
+                  </div>
+                  <p>${formatted}</p>
+                </div>
+              `;
             }
           } catch (e) {
             console.warn('Gemini API call failed, falling back to built-in knowledge engine', e);
           }
         }
-
         // Built-in Smart Knowledge Engine (100% Free & Offline)
         await new Promise(r => setTimeout(r, 400));
         return this.generateBuiltinKnowledgeAnswer(query);
@@ -4714,8 +4760,19 @@
       openAISettingsModal() {
         const modal = document.getElementById('modal-ai-settings');
         const input = document.getElementById('input-gemini-key');
+        const key = localStorage.getItem('trc_gemini_api_key') || '';
         if (input) {
-          input.value = localStorage.getItem('trc_gemini_api_key') || '';
+          input.value = key;
+        }
+        const statusBadge = document.getElementById('ai-settings-status-badge');
+        if (statusBadge) {
+          if (key && key.trim().length > 10) {
+            statusBadge.className = 'inline-flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium border border-emerald-200';
+            statusBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Gemini 3.5 Flash พร้อมใช้งาน';
+          } else {
+            statusBadge.className = 'inline-flex items-center gap-1 text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full font-medium border border-slate-200';
+            statusBadge.innerHTML = '⚪ โหมดออฟไลน์ (Built-in Engine)';
+          }
         }
         if (modal) modal.classList.remove('hidden');
         lucide.createIcons();
@@ -4730,17 +4787,33 @@
         const input = document.getElementById('input-gemini-key');
         if (input) {
           const key = input.value.trim();
-          localStorage.setItem('trc_gemini_api_key', key);
-          alert(key ? 'บันทึก Gemini API Key เรียบร้อยแล้ว! ปลดล็อกโหมดสนทนาสด' : 'ล้าง API Key เรียบร้อยแล้ว (ใช้งานโหมด Built-in Engine ออฟไลน์)');
+          if (key.length > 5) {
+            localStorage.setItem('trc_gemini_api_key', key);
+            alert('✅ บันทึก Gemini API Key เรียบร้อยแล้ว! อาจารย์กาชาด AI พร้อมตอบสดด้วยโมเดล Gemini 3.5 Flash 24 ชม.');
+          } else {
+            localStorage.removeItem('trc_gemini_api_key');
+            alert('ล้าง API Key เรียบร้อยแล้ว (สลับกลับไปใช้ Built-in Knowledge Engine ฟรีออฟไลน์ 100%)');
+          }
         }
         this.closeAISettingsModal();
       }
 
       initGeminiKey() {
-        // Ready for live Gemini if key exists
+        // Auto-detect API key from URL parameter if user opened via direct link
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+          const queryKey = urlParams.get('geminiKey') || urlParams.get('apiKey');
+          if (queryKey && queryKey.trim().length > 10) {
+            localStorage.setItem('trc_gemini_api_key', queryKey.trim());
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+        } catch (e) {
+          console.warn('URL param parse error:', e);
+        }
+
         const key = localStorage.getItem('trc_gemini_api_key');
-        if (key) {
-          console.log('[AI Coach] Gemini API Key configured.');
+        if (key && key.trim().length > 10) {
+          console.log('[AI Coach] Gemini 3.5 Flash API Key is configured and ready.');
         }
       }
     }
