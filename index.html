@@ -2,7 +2,7 @@
 <html lang="th" class="h-full bg-slate-50">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
   <title>ระบบสอบออนไลน์อัจฉริยะ (Smart Exam & Learning)</title>
   
   <!-- Fonts: Prompt & Sarabun -->
@@ -1226,8 +1226,8 @@
   </div>
 
   <!-- AI COACH SLIDE-OVER DRAWER (Responsive Mobile/Tablet/Desktop) -->
-  <div id="drawer-ai-coach" onclick="if(event.target === this) app.toggleAICoachDrawer()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex justify-end">
-    <div class="bg-white w-full sm:max-w-md h-full flex flex-col shadow-2xl animate-slideLeft">
+  <div id="drawer-ai-coach" onclick="if(event.target === this) app.toggleAICoachDrawer()" class="fixed inset-0 h-[100dvh] max-h-[100dvh] bg-slate-900/60 backdrop-blur-xs z-50 hidden flex justify-end">
+    <div class="bg-white w-full sm:max-w-md h-full flex flex-col shadow-2xl animate-slideLeft overflow-hidden">
       <!-- Header -->
       <div class="p-4 sm:p-5 border-b border-slate-100 bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -1338,13 +1338,24 @@
           </button>
         </div>
 
-        <!-- Input Bar -->
-        <div class="p-3 bg-white border-t border-slate-200 flex items-center gap-2 shrink-0">
-          <input type="text" id="coach-chat-input" onkeydown="if(event.key==='Enter') app.sendCoachChat()" placeholder="พิมพ์ถามข้อสงสัย เช่น วันลาพักผ่อนสะสมได้กี่วัน..." class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm font-prompt focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all">
-          <button onclick="app.sendCoachChat()" class="p-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white transition-colors flex items-center justify-center shrink-0 shadow-xs">
+        <!-- Input Bar (Mobile Thai IME & Keyboard Optimized) -->
+        <form onsubmit="event.preventDefault(); app.sendCoachChat();" class="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-white border-t border-slate-200 flex items-center gap-2 shrink-0">
+          <input 
+            type="text" 
+            id="coach-chat-input" 
+            autocomplete="off" 
+            autocorrect="on" 
+            autocapitalize="none" 
+            spellcheck="false" 
+            enterkeyhint="send"
+            onkeydown="app.handleCoachInputKey(event)"
+            placeholder="พิมพ์ถามข้อสงสัย เช่น วันลาพักผ่อนสะสมได้กี่วัน..." 
+            class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-[16px] sm:text-sm font-prompt focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all"
+          >
+          <button type="submit" class="p-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white transition-colors flex items-center justify-center shrink-0 shadow-xs active:scale-95" aria-label="ส่งคำถาม">
             <i data-lucide="send" class="w-4 h-4"></i>
           </button>
-        </div>
+        </form>
       </div>
 
     </div>
@@ -1473,6 +1484,7 @@
         this.updateAICoachDiagnostic();
         this.setupFlashcardKeyboard();
         this.setupGameKeyboard();
+        this.setupCoachChatInput();
         this.setupPWA();
         this.updateSRSDueAlert();
       }
@@ -3504,6 +3516,9 @@
 
       setupGameKeyboard() {
         window.addEventListener('keydown', (e) => {
+          if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) {
+            return;
+          }
           const gameScreen = document.getElementById('screen-game');
           const playView = document.getElementById('game-view-play');
           if (!gameScreen || gameScreen.classList.contains('hidden')) return;
@@ -3649,11 +3664,20 @@
         const drawer = document.getElementById('drawer-ai-coach');
         if (!drawer) return;
         const isHidden = drawer.classList.contains('hidden');
+        const drawerContent = drawer.querySelector('div');
         if (isHidden) {
           drawer.classList.remove('hidden');
+          if (window.visualViewport && drawerContent) {
+            drawerContent.style.height = `${window.visualViewport.height}px`;
+          }
           this.updateAICoachDiagnostic();
         } else {
           drawer.classList.add('hidden');
+          if (drawerContent) {
+            drawerContent.style.height = '';
+          }
+          const input = document.getElementById('coach-chat-input');
+          if (input) input.blur();
         }
         lucide.createIcons();
       }
@@ -3679,8 +3703,11 @@
           if (chatView) chatView.classList.remove('hidden');
           if (diagBtn) diagBtn.className = inactiveClass;
           if (chatBtn) chatBtn.className = activeClass;
-          const input = document.getElementById('coach-chat-input');
-          if (input) setTimeout(() => input.focus(), 150);
+          // Only auto-focus on desktop with physical keyboard to avoid mobile keyboard jumping
+          if (window.innerWidth > 640) {
+            const input = document.getElementById('coach-chat-input');
+            if (input) setTimeout(() => input.focus(), 150);
+          }
         }
         lucide.createIcons();
       }
@@ -3975,6 +4002,51 @@
         box.classList.remove('hidden');
         if (btn) btn.innerHTML = `<i data-lucide="chevron-up" class="w-3.5 h-3.5 text-purple-600"></i> <span>ซ่อนคำชำแหละ</span>`;
         lucide.createIcons();
+      }
+
+      setupCoachChatInput() {
+        const input = document.getElementById('coach-chat-input');
+        if (!input) return;
+
+        this.isChatInputComposing = false;
+        input.addEventListener('compositionstart', () => {
+          this.isChatInputComposing = true;
+        });
+        input.addEventListener('compositionupdate', () => {
+          this.isChatInputComposing = true;
+        });
+        input.addEventListener('compositionend', () => {
+          this.isChatInputComposing = false;
+        });
+
+        // Ensure visible above virtual keyboard on mobile focus
+        input.addEventListener('focus', () => {
+          setTimeout(() => {
+            input.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }, 300);
+        });
+
+        // Mobile visual viewport resize (keeps drawer & input pinned above virtual keyboard)
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener('resize', () => {
+            const drawer = document.getElementById('drawer-ai-coach');
+            const drawerContent = drawer ? drawer.querySelector('div') : null;
+            if (drawer && !drawer.classList.contains('hidden') && drawerContent) {
+              drawerContent.style.height = `${window.visualViewport.height}px`;
+            }
+          });
+        }
+      }
+
+      handleCoachInputKey(event) {
+        // Prevent premature submit when Thai IME is composing or selecting candidates
+        if (this.isChatInputComposing || event.isComposing || event.keyCode === 229) {
+          return;
+        }
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+          this.sendCoachChat();
+        }
       }
 
       sendCoachPrompt(promptText) {
