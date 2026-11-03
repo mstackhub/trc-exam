@@ -1,10 +1,11 @@
-const CACHE_NAME = 'trc-exam-v13';
+const CACHE_NAME = 'trc-exam-v14';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './data/questions.js',
   './data/notes.js',
+  './data/official_exam.js',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png'

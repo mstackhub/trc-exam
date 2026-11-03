@@ -103,12 +103,17 @@
         </div>
       </div>
 
-      <!-- Desktop Navigation Tabs (Hidden on mobile/tablet, visible on lg+) -->
-      <div id="header-status" class="hidden lg:flex items-center space-x-1 sm:space-x-2 py-0.5">
-        <nav class="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl text-xs sm:text-sm font-medium shrink-0">
+      <!-- Desktop Navigation Tabs (Hidden on mobile/tablet, visible on xl+) -->
+      <div id="header-status" class="hidden xl:flex items-center space-x-1 sm:space-x-2 py-0.5 min-w-0">
+        <nav class="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl text-xs sm:text-sm font-medium shrink-0 overflow-x-auto no-scrollbar">
           <button id="nav-btn-home" onclick="app.showScreen('welcome')" class="px-2.5 sm:px-3 py-1.5 rounded-lg transition-all bg-white text-slate-900 shadow-sm flex items-center gap-1 whitespace-nowrap shrink-0">
             <i data-lucide="book-open" class="w-3.5 h-3.5 text-redcross-600"></i>
             <span class="font-prompt text-xs sm:text-sm">ห้องสอบ</span>
+          </button>
+          <button id="nav-btn-written" onclick="app.showScreen('written')" class="px-2.5 sm:px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1 whitespace-nowrap shrink-0">
+            <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-rose-500"></i>
+            <span class="font-prompt text-xs sm:text-sm">ข้อเขียน & คำนวณ</span>
+            <span class="px-1.5 py-0.2 bg-rose-100 text-rose-800 text-[9px] rounded-full font-bold">39 ข้อ</span>
           </button>
           <button id="nav-btn-flashcards" onclick="app.showScreen('flashcards')" class="px-2.5 sm:px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1 whitespace-nowrap shrink-0">
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i>
@@ -132,12 +137,12 @@
         <!-- Install App Button (PWA Desktop) -->
         <button id="btn-install-pwa" onclick="app.promptInstallPWA()" class="hidden px-2.5 py-1.5 rounded-xl bg-redcross-600 hover:bg-redcross-700 text-white text-xs font-prompt font-semibold items-center gap-1 shadow-sm transition-all shrink-0">
           <i data-lucide="download" class="w-3.5 h-3.5"></i>
-          <span class="hidden lg:inline">ติดตั้งแอป</span>
+          <span class="hidden xl:inline">ติดตั้งแอป</span>
         </button>
       </div>
 
       <!-- Mobile/Tablet Hamburger Button (Visible on screens < lg) -->
-      <div class="flex items-center gap-1.5 lg:hidden">
+      <div class="flex items-center gap-1.5 xl:hidden">
         <button id="btn-mobile-menu" onclick="app.toggleMobileMenu()" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors flex items-center justify-center shrink-0 shadow-2xs active:scale-95" aria-label="เปิดเมนูหลัก">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
@@ -182,6 +187,43 @@
           <button onclick="app.startSRSExam()" class="px-3.5 py-2 rounded-xl font-prompt text-xs font-medium bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition-colors flex items-center justify-center gap-1.5 active:scale-95">
             <i data-lucide="play" class="w-3.5 h-3.5 text-slate-400"></i>
             <span>สอบชุด SRS</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- FEATURED HERO BANNER: ชุดข้อสอบจริง 74 ข้อ (ถอดจากข้อสอบจริง 11 หน้า กลุ่มงานกลยุทธ์องค์กร) -->
+      <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-rose-950 via-red-900 to-slate-900 text-white shadow-xl border-2 border-red-500/40 relative overflow-hidden space-y-4">
+        <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-red-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-rose-300 flex items-center justify-center shrink-0 shadow-inner">
+              <i data-lucide="file-check-2" class="w-6 h-6 text-rose-400"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-[10px] bg-rose-500 text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider font-mono">ข้อสอบจริง 11 หน้า</span>
+                <span class="text-[10px] bg-white/20 text-white font-semibold px-2 py-0.5 rounded-full font-prompt">200 คะแนน • 120 นาที</span>
+              </div>
+              <h2 class="font-prompt font-bold text-lg sm:text-xl text-white mt-1">ข้อสอบจริง จนท.บริหารงานทั่วไป 3-5 (กลยุทธ์องค์กร)</h2>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs sm:text-sm text-rose-100 font-sarabun leading-relaxed">
+          ถอดจากข้อสอบจริงครบถ้วน 74 ข้อ: <strong>ปรนัย 35 ข้อ</strong> (กติกาทางการ: ตอบผิดหัก 1 คะแนน) + <strong>อัตนัยข้อเขียน 36 ข้อ</strong> + <strong>คำนวณการพัสดุ 3 ข้อ</strong> พร้อมแนวคำตอบ <em>สั้นกระชับ ข้อมูลครบถ้วน</em> และสมุดฝึกร่างคำตอบ
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+          <!-- Button 1: ข้อเขียน & คำนวณ (39 ข้อ) -->
+          <button onclick="app.showScreen('written')" class="px-4 py-3 rounded-2xl bg-white text-slate-900 hover:bg-rose-50 font-prompt font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 group">
+            <i data-lucide="pen-tool" class="w-4 h-4 text-redcross-600 group-hover:rotate-12 transition-transform"></i>
+            <span>คลังข้อสอบข้อเขียน & คำนวณ (39 ข้อ)</span>
+          </button>
+          
+          <!-- Button 2: ปรนัยจับเวลา 120 นาที (35 ข้อ) -->
+          <button onclick="app.startOfficialMCExam()" class="px-4 py-3 rounded-2xl bg-redcross-600/90 hover:bg-redcross-600 text-white border border-redcross-400/50 font-prompt font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 group">
+            <i data-lucide="timer" class="w-4 h-4 text-amber-300 group-hover:scale-110 transition-transform"></i>
+            <span>จำลองสอบปรนัยจริง 35 ข้อ (หักคะแนนติดลบ)</span>
           </button>
         </div>
       </div>
@@ -420,6 +462,35 @@
           <span id="score-number" class="text-5xl sm:text-6xl font-extrabold font-prompt text-redcross-600">0</span>
           <span class="text-2xl text-slate-400 font-prompt">/ <span id="score-total">0</span></span>
           <span id="score-percent" class="ml-2 text-sm px-2.5 py-0.5 rounded-full font-semibold bg-slate-100 text-slate-700">0%</span>
+        </div>
+
+        <!-- Official Exam Penalty Banner (Visible in official exam mode) -->
+        <div id="official-exam-penalty-banner" class="hidden p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 text-left my-4 space-y-2">
+          <div class="flex items-center gap-2 font-prompt font-bold text-amber-900 text-sm">
+            <i data-lucide="scale" class="w-4 h-4 text-amber-600"></i>
+            <span>ผลการคิดคะแนนตามเกณฑ์ทางการ (หักคะแนนข้อสอบปรนัยที่ตอบผิด)</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-sarabun pt-1">
+            <div class="bg-white/80 p-2 rounded-lg border border-amber-200">
+              <span class="text-slate-500 block">ตอบถูก (+2/ข้อ)</span>
+              <span id="stat-official-correct-pts" class="font-bold text-emerald-700 font-mono text-sm">+0 คะแนน</span>
+            </div>
+            <div class="bg-white/80 p-2 rounded-lg border border-amber-200">
+              <span class="text-slate-500 block">ตอบผิด (-1/ข้อ)</span>
+              <span id="stat-official-penalty-pts" class="font-bold text-rose-700 font-mono text-sm">-0 คะแนน</span>
+            </div>
+            <div class="bg-white/80 p-2 rounded-lg border border-amber-200">
+              <span class="text-slate-500 block">ไม่ตอบ (0/ข้อ)</span>
+              <span id="stat-official-skip-pts" class="font-bold text-slate-600 font-mono text-sm">0 ข้อ</span>
+            </div>
+            <div class="bg-amber-100 p-2 rounded-lg border border-amber-300">
+              <span class="text-amber-900 block font-bold">คะแนนสุทธิ (เต็ม 70)</span>
+              <span id="stat-official-net-score" class="font-extrabold text-amber-950 font-mono text-sm">0 คะแนน</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-amber-800 leading-relaxed font-sarabun">
+            *เกณฑ์การสอบข้อเขียนสภากาชาดไทย กำหนดให้ตัดคะแนนข้อที่ตอบผิด 1 คะแนน หากไม่มั่นใจสามารถเว้นว่างได้โดยไม่ถูกหักคะแนน (เกณฑ์ผ่าน 60% = 42 คะแนนขึ้นไป)
+          </p>
         </div>
 
         <!-- Quick Stats Grid -->
@@ -949,7 +1020,65 @@
       </div>
     </section>
 
-    <!-- 7. ARCADE MINI-GAME SCREEN (มินิเกมประลองสปีดตัดชอยส์) -->
+    <!-- 7. OFFICIAL WRITTEN & CALCULATION EXAM SCREEN (คลังข้อสอบข้อเขียน & คำนวณจริง 39 ข้อ) -->
+    <section id="screen-written" class="hidden max-w-4xl mx-auto w-full space-y-6 py-4">
+      <!-- Header -->
+      <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="space-y-1">
+            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-100">
+              <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i> ข้อสอบจริง 11 หน้า • ข้อเขียน & คำนวณ 39 ข้อ (130 คะแนน)
+            </div>
+            <h2 class="text-xl sm:text-2xl font-prompt font-bold text-slate-900">คลังข้อสอบข้อเขียน & คำนวณจริง (กลุ่มงานกลยุทธ์องค์กร)</h2>
+            <p class="text-xs sm:text-sm text-slate-500">
+              ตำแหน่ง เจ้าหน้าที่บริหารงานทั่วไป 3-5 สภากาชาดไทย พร้อมแนวคำตอบ <strong>สั้นกระชับ ข้อมูลครบถ้วน</strong> เกณฑ์คะแนน และสมุดร่างคำตอบ
+            </p>
+          </div>
+          <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+            <button onclick="app.showScreen('welcome')" class="px-3.5 py-2 rounded-xl text-xs font-prompt font-medium border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors flex items-center gap-1.5">
+              <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-slate-500"></i> กลับหน้าหลัก
+            </button>
+            <button onclick="app.startOfficialMCExam()" class="px-3.5 py-2 rounded-xl text-xs font-prompt font-bold bg-redcross-600 hover:bg-redcross-700 text-white shadow-xs transition-colors flex items-center gap-1.5">
+              <i data-lucide="timer" class="w-3.5 h-3.5 text-amber-300"></i> สอบปรนัย 35 ข้อ
+            </button>
+          </div>
+        </div>
+
+        <!-- Search & Category Filters -->
+        <div class="space-y-2.5 pt-2 border-t border-slate-100">
+          <div class="relative">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="written-search-input" oninput="app.onWrittenSearch(this.value)" placeholder="ค้นหาข้อสอบข้อเขียน เช่น vat, 6R, 5 หน่วยงาน, หนังสือภายนอก, PR, ตารางเปรียบเทียบ..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all font-prompt">
+          </div>
+
+          <!-- Category filter pills -->
+          <div id="written-category-pills" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
+            <!-- Dynamic Category Pills -->
+          </div>
+        </div>
+
+        <!-- Metric Badges Row -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs text-slate-500 font-prompt">
+          <div class="flex items-center gap-3">
+            <span id="written-count-label" class="font-semibold text-slate-800">แสดง 39 ข้อ (130 คะแนน)</span>
+            <span class="text-slate-300">|</span>
+            <span class="text-emerald-700 font-medium flex items-center gap-1"><i data-lucide="check" class="w-3 h-3 text-emerald-600"></i> อัตนัยตอบผิดไม่หักคะแนน</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="app.toggleAllWrittenAnswers(true)" class="text-xs text-rose-600 hover:text-rose-800 font-medium underline">เปิดเฉลยทั้งหมด</button>
+            <span class="text-slate-300">•</span>
+            <button onclick="app.toggleAllWrittenAnswers(false)" class="text-xs text-slate-500 hover:text-slate-700 font-medium underline">ปิดเฉลยทั้งหมด</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Written Cards Container -->
+      <div id="written-cards-container" class="space-y-4">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- 8. ARCADE MINI-GAME SCREEN (มินิเกมประลองสปีดตัดชอยส์) -->
     <section id="screen-game" class="hidden max-w-2xl mx-auto w-full space-y-4 py-2">
 
       <!-- A. LOBBY VIEW (Select Mode, High Scores, Start) -->
@@ -1276,6 +1405,38 @@
           <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
         </button>
 
+        <button id="mob-nav-btn-written" onclick="app.showScreen('written'); app.toggleMobileMenu(false);" class="w-full p-3 rounded-xl transition-all flex items-center justify-between text-slate-700 hover:bg-slate-100">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+              <i data-lucide="pen-tool" class="w-4 h-4"></i>
+            </div>
+            <div class="text-left">
+              <div class="font-semibold text-slate-900 flex items-center gap-1.5">
+                <span>ข้อเขียน & คำนวณจริง</span>
+                <span class="px-1.5 py-0.2 bg-rose-100 text-rose-800 text-[9px] rounded-full font-bold">39 ข้อ</span>
+              </div>
+              <div class="text-[11px] text-slate-500 font-normal">ข้อสอบจริง 11 หน้า • สมุดร่าง & เฉลย</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+        </button>
+
+        <button onclick="app.startOfficialMCExam(); app.toggleMobileMenu(false);" class="w-full p-3 rounded-xl transition-all flex items-center justify-between text-slate-700 hover:bg-slate-100">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
+              <i data-lucide="timer" class="w-4 h-4"></i>
+            </div>
+            <div class="text-left">
+              <div class="font-semibold text-slate-900 flex items-center gap-1.5">
+                <span>จำลองสอบจริง 120 นาที</span>
+                <span class="px-1.5 py-0.2 bg-amber-100 text-amber-800 text-[9px] rounded-full font-bold">หักคะแนน</span>
+              </div>
+              <div class="text-[11px] text-slate-500 font-normal">ปรนัย 35 ข้อ (กติกาตอบผิดติดลบ 1 คะแนน)</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+        </button>
+
         <button id="mob-nav-btn-flashcards" onclick="app.showScreen('flashcards'); app.toggleMobileMenu(false);" class="w-full p-3 rounded-xl transition-all flex items-center justify-between text-slate-700 hover:bg-slate-100">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
@@ -1360,8 +1521,8 @@
   </div>
 
   <!-- AI COACH SLIDE-OVER DRAWER (Responsive Mobile/Tablet/Desktop) -->
-  <div id="drawer-ai-coach" onclick="if(event.target === this) app.toggleAICoachDrawer()" class="fixed inset-0 h-[100dvh] max-h-[100dvh] bg-slate-900/60 backdrop-blur-xs z-50 hidden flex justify-end">
-    <div class="bg-white w-full sm:max-w-md h-full flex flex-col shadow-2xl animate-slideLeft overflow-hidden">
+  <div id="drawer-ai-coach" onclick="if(event.target === this) app.toggleAICoachDrawer()" class="fixed inset-0 h-full w-full bg-slate-900/70 backdrop-blur-xs z-50 hidden flex justify-end">
+    <div class="bg-white w-full sm:max-w-md h-full min-h-[100dvh] flex flex-col shadow-2xl animate-slideLeft overflow-hidden relative">
       <!-- Header -->
       <div class="p-4 sm:p-5 border-b border-slate-100 bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -1559,6 +1720,7 @@
   <!-- Load Questions Data & Core Application Script -->
   <script src="data/questions.js"></script>
   <script src="data/notes.js"></script>
+  <script src="data/official_exam.js"></script>
   <script>
     /**
      * Fisher-Yates (Knuth) Shuffle Algorithm
@@ -1606,6 +1768,12 @@
         // AI Coach state
         this.coachActiveTab = 'diagnostic';
         this.isAICoachThinking = false;
+
+        // Written & Calculation Exam state
+        this.writtenFilterCategory = 'all';
+        this.writtenSearchQuery = '';
+        this.writtenOpenAnswers = {};
+        this.isOfficialExamMode = false;
 
         // PWA install prompt holder
         this.deferredPrompt = null;
@@ -1655,6 +1823,9 @@
         const gameScreen = document.getElementById('screen-game');
         if (gameScreen) gameScreen.classList.add('hidden');
 
+        const writtenScreen = document.getElementById('screen-written');
+        if (writtenScreen) writtenScreen.classList.add('hidden');
+
         this.updateNavButtons(screenName);
 
         if (screenName === 'welcome') {
@@ -1696,6 +1867,12 @@
             this.showGameLobby();
           }
           this.stopTimer();
+        } else if (screenName === 'written') {
+          if (writtenScreen) {
+            writtenScreen.classList.remove('hidden');
+            this.initWrittenExam();
+          }
+          this.stopTimer();
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
         lucide.createIcons();
@@ -1707,6 +1884,9 @@
        * Layer 2: สลับตำแหน่งชอยส์ของแต่ละข้อ
        */
       startExam(categoryFilter = 'all', specificQuestions = null) {
+        if (categoryFilter !== 'official_paper') {
+          this.isOfficialExamMode = false;
+        }
         let selectedQuestions = [];
 
         if (specificQuestions && specificQuestions.length > 0) {
@@ -1759,11 +1939,25 @@
       startTimer() {
         this.stopTimer();
         const display = document.getElementById('timer-display');
+        const limitSeconds = 120 * 60; // 120 mins = 7200s
         this.timerInterval = setInterval(() => {
           this.elapsedSeconds++;
-          const mins = String(Math.floor(this.elapsedSeconds / 60)).padStart(2, '0');
-          const secs = String(this.elapsedSeconds % 60).padStart(2, '0');
-          if (display) display.innerText = `${mins}:${secs}`;
+          if (this.isOfficialExamMode) {
+            const remain = Math.max(0, limitSeconds - this.elapsedSeconds);
+            const rMins = String(Math.floor(remain / 60)).padStart(2, '0');
+            const rSecs = String(remain % 60).padStart(2, '0');
+            if (display) {
+              display.innerHTML = `<span class="text-rose-600 font-bold font-mono">⏱️ ${rMins}:${rSecs}</span>`;
+            }
+            if (remain <= 0) {
+              alert('หมดเวลาทำข้อสอบ 120 นาที ระบบจะส่งคำตอบตรวจโดยอัตโนมัติ');
+              this.evaluateExam();
+            }
+          } else {
+            const mins = String(Math.floor(this.elapsedSeconds / 60)).padStart(2, '0');
+            const secs = String(this.elapsedSeconds % 60).padStart(2, '0');
+            if (display) display.innerText = `${mins}:${secs}`;
+          }
         }, 1000);
       }
 
@@ -1958,14 +2152,56 @@
           if (isCorrect) categoryStats[q.category].correct++;
         });
 
-        const percent = Math.round((correctCount / total) * 100);
-
-        // Update Result Screen UI
-        document.getElementById('score-number').innerText = correctCount;
-        document.getElementById('score-total').innerText = total;
-        document.getElementById('score-percent').innerText = `${percent}%`;
-        document.getElementById('stat-correct').innerText = `${correctCount} ข้อ`;
+        let percent = Math.round((correctCount / total) * 100);
         const wrongCount = total - correctCount;
+
+        // Official Exam Penalty Calculation
+        const penaltyBanner = document.getElementById('official-exam-penalty-banner');
+        if (this.isOfficialExamMode) {
+          let officialCorrect = 0;
+          let officialWrong = 0;
+          let officialSkipped = 0;
+
+          session.questions.forEach(q => {
+            if (!q.userSelectedOptionId) {
+              officialSkipped++;
+            } else if (q.userSelectedOptionId === q.correctId) {
+              officialCorrect++;
+            } else {
+              officialWrong++;
+            }
+          });
+
+          // Official Rules: +2 per correct, -1 per wrong, 0 per skip
+          const correctPts = officialCorrect * 2;
+          const penaltyPts = officialWrong * 1;
+          const netScore = Math.max(0, correctPts - penaltyPts);
+          const maxPts = total * 2; // 70 points
+          percent = Math.round((netScore / maxPts) * 100);
+
+          document.getElementById('score-number').innerText = netScore;
+          document.getElementById('score-total').innerText = maxPts;
+          document.getElementById('score-percent').innerText = `${percent}% (หักข้อผิด -1)`;
+
+          if (penaltyBanner) {
+            penaltyBanner.classList.remove('hidden');
+            const elCorr = document.getElementById('stat-official-correct-pts');
+            const elPen = document.getElementById('stat-official-penalty-pts');
+            const elSkip = document.getElementById('stat-official-skip-pts');
+            const elNet = document.getElementById('stat-official-net-score');
+            if (elCorr) elCorr.innerText = `+${correctPts} คะแนน (${officialCorrect} ข้อ)`;
+            if (elPen) elPen.innerText = `-${penaltyPts} คะแนน (${officialWrong} ข้อ)`;
+            if (elSkip) elSkip.innerText = `${officialSkipped} ข้อ (0 คะแนน)`;
+            if (elNet) elNet.innerText = `${netScore} / ${maxPts} คะแนน`;
+          }
+        } else {
+          document.getElementById('score-number').innerText = correctCount;
+          document.getElementById('score-total').innerText = total;
+          document.getElementById('score-percent').innerText = `${percent}%`;
+          if (penaltyBanner) penaltyBanner.classList.add('hidden');
+        }
+
+        document.getElementById('stat-correct').innerText = `${correctCount} ข้อ`;
         document.getElementById('stat-wrong').innerText = `${wrongCount} ข้อ`;
 
         const mins = String(Math.floor(this.elapsedSeconds / 60)).padStart(2, '0');
@@ -2322,6 +2558,8 @@
         if (btnHome) btnHome.className = (screenName === 'welcome' || screenName === 'exam' || screenName === 'result') ? activeClass : inactiveClass;
         if (btnDash) btnDash.className = screenName === 'dashboard' ? activeClass : inactiveClass;
         if (btnFC) btnFC.className = screenName === 'flashcards' ? activeClass : inactiveClass;
+        const btnWritten = document.getElementById('nav-btn-written');
+        if (btnWritten) btnWritten.className = screenName === 'written' ? activeClass : inactiveClass;
         if (btnNotes) btnNotes.className = screenName === 'notes' ? activeClass : inactiveClass;
         if (btnGame) btnGame.className = screenName === 'game' ? activeClass : inactiveClass;
 
@@ -2338,6 +2576,8 @@
         if (mobHome) mobHome.className = (screenName === 'welcome' || screenName === 'exam' || screenName === 'result') ? mobActive : mobInactive;
         if (mobFC) mobFC.className = screenName === 'flashcards' ? mobActive : mobInactive;
         if (mobNotes) mobNotes.className = screenName === 'notes' ? mobActive : mobInactive;
+        const mobWritten = document.getElementById('mob-nav-btn-written');
+        if (mobWritten) mobWritten.className = screenName === 'written' ? mobActive : mobInactive;
         if (mobGame) mobGame.className = screenName === 'game' ? mobActive : mobInactive;
         if (mobDash) mobDash.className = screenName === 'dashboard' ? mobActive : mobInactive;
       }
@@ -3141,6 +3381,285 @@
       }
 
       // ==========================================
+      // 3.5 OFFICIAL WRITTEN & CALCULATION EXAM MODULE (ข้อสอบจริง 11 หน้า 39 ข้อ)
+      // ==========================================
+
+      initWrittenExam() {
+        if (!this.writtenOpenAnswers) this.writtenOpenAnswers = {};
+        this.renderWrittenCategories();
+        this.renderWrittenExam();
+      }
+
+      renderWrittenCategories() {
+        const pillsContainer = document.getElementById('written-category-pills');
+        if (!pillsContainer || typeof OFFICIAL_EXAM_PAPER === 'undefined') return;
+
+        const categories = [
+          { id: 'all', label: 'ทั้งหมด (39 ข้อ)', count: OFFICIAL_EXAM_PAPER.subjectiveAndMath.length },
+          { id: 'งานในสำนักงาน (อัตนัย)', label: 'งานสำนักงาน (10 ข้อ)', count: 10 },
+          { id: 'การพัสดุ (อัตนัย)', label: 'การพัสดุ (10 ข้อ)', count: 10 },
+          { id: 'งานสารบรรณ (อัตนัย)', label: 'งานสารบรรณ (15 ข้อ)', count: 15 },
+          { id: 'การเขียนจดหมายราชการ (อัตนัย)', label: 'จดหมายราชการ (1 ข้อ)', count: 1 },
+          { id: 'การพัสดุ (คำนวณ)', label: 'คำนวณการพัสดุ (3 ข้อ)', count: 3 }
+        ];
+
+        pillsContainer.innerHTML = categories.map(cat => {
+          const isActive = this.writtenFilterCategory === cat.id;
+          const activeClass = 'bg-rose-600 text-white shadow-xs font-semibold';
+          const inactiveClass = 'bg-slate-100 hover:bg-slate-200 text-slate-700';
+          return `
+            <button onclick="app.setWrittenCategory('${cat.id}')" class="px-3 py-1.5 rounded-xl whitespace-nowrap transition-all font-prompt shrink-0 ${isActive ? activeClass : inactiveClass}">
+              ${cat.label}
+            </button>
+          `;
+        }).join('');
+      }
+
+      setWrittenCategory(catId) {
+        this.writtenFilterCategory = catId;
+        this.renderWrittenCategories();
+        this.renderWrittenExam();
+      }
+
+      onWrittenSearch(query) {
+        this.writtenSearchQuery = (query || '').trim().toLowerCase();
+        this.renderWrittenExam();
+      }
+
+      renderWrittenExam() {
+        const container = document.getElementById('written-cards-container');
+        const countLabel = document.getElementById('written-count-label');
+        if (!container || typeof OFFICIAL_EXAM_PAPER === 'undefined') return;
+
+        const allItems = OFFICIAL_EXAM_PAPER.subjectiveAndMath || [];
+        const filtered = allItems.filter(item => {
+          const matchesCat = this.writtenFilterCategory === 'all' || item.category === this.writtenFilterCategory;
+          if (!matchesCat) return false;
+          if (!this.writtenSearchQuery) return true;
+          const qText = item.question.toLowerCase();
+          const aText = (item.modelAnswer || '').toLowerCase();
+          const cText = (item.keyCriteria || '').toLowerCase();
+          return qText.includes(this.writtenSearchQuery) || aText.includes(this.writtenSearchQuery) || cText.includes(this.writtenSearchQuery);
+        });
+
+        if (countLabel) {
+          const totalPoints = filtered.reduce((acc, curr) => acc + (curr.score || 0), 0);
+          countLabel.innerText = `แสดง ${filtered.length} ข้อ (${totalPoints} คะแนน)`;
+        }
+
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 text-center space-y-3 shadow-xs">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+                <i data-lucide="search-x" class="w-6 h-6"></i>
+              </div>
+              <h4 class="font-prompt font-bold text-slate-800">ไม่พบข้อสอบที่ตรงกับคำค้นหา</h4>
+              <p class="text-xs text-slate-500 font-sarabun">ลองค้นหาด้วยคำอื่น หรือกดเลือกแท็บ "ทั้งหมด" เพื่อดูข้อสอบทั้งหมด</p>
+              <button onclick="app.setWrittenCategory('all'); document.getElementById('written-search-input').value = ''; app.onWrittenSearch('');" class="px-4 py-2 rounded-xl text-xs font-prompt font-semibold bg-rose-50 text-rose-700 hover:bg-rose-100 transition-colors">
+                รีเซ็ตการค้นหา
+              </button>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = filtered.map(item => {
+          const draftKey = 'trc_written_scratch_' + item.id;
+          const savedDraft = localStorage.getItem(draftKey) || '';
+          const isOpen = this.writtenOpenAnswers && this.writtenOpenAnswers[item.id];
+
+          // Badge theme based on category
+          let catBadgeCls = 'bg-rose-50 text-rose-700 border-rose-200';
+          let catIcon = 'file-text';
+          if (item.category.includes('คำนวณ')) {
+            catBadgeCls = 'bg-amber-50 text-amber-800 border-amber-200';
+            catIcon = 'calculator';
+          } else if (item.category.includes('สารบรรณ')) {
+            catBadgeCls = 'bg-indigo-50 text-indigo-700 border-indigo-200';
+            catIcon = 'mail';
+          } else if (item.category.includes('พัสดุ')) {
+            catBadgeCls = 'bg-blue-50 text-blue-700 border-blue-200';
+            catIcon = 'package';
+          }
+
+          return `
+            <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md transition-all overflow-hidden" id="card-${item.id}">
+              <!-- Card Header -->
+              <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 bg-slate-50/50">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-xs font-bold font-mono px-2.5 py-0.5 rounded-lg bg-slate-900 text-white">
+                    ข้อที่ ${item.number}
+                  </span>
+                  <span class="text-xs font-medium px-2.5 py-0.5 rounded-full border ${catBadgeCls} flex items-center gap-1">
+                    <i data-lucide="${catIcon}" class="w-3 h-3"></i>
+                    <span>${this.escapeHtml(item.category)}</span>
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold font-prompt px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200">
+                    ⭐ ${item.score} คะแนน
+                  </span>
+                </div>
+              </div>
+
+              <!-- Question Content -->
+              <div class="p-4 sm:p-5 space-y-4">
+                <div class="font-prompt font-semibold text-slate-900 text-sm sm:text-base leading-relaxed">
+                  ${this.escapeHtml(item.question)}
+                </div>
+
+                <!-- Interactive Practice Scratchpad -->
+                <div class="space-y-1.5 pt-1">
+                  <div class="flex items-center justify-between text-xs text-slate-500 font-prompt">
+                    <span class="flex items-center gap-1 font-medium text-slate-700">
+                      <i data-lucide="edit-3" class="w-3.5 h-3.5 text-indigo-500"></i> สมุดฝึกร่างคำตอบ (บันทึกอัตโนมัติ):
+                    </span>
+                    <span id="scratch-status-${item.id}" class="text-[11px] text-slate-400">
+                      ${savedDraft ? '✓ บันทึกร่างแล้ว' : 'ยังไม่ได้พิมพ์'}
+                    </span>
+                  </div>
+                  <textarea 
+                    id="scratch-${item.id}" 
+                    rows="3" 
+                    oninput="app.saveWrittenDraft('${item.id}', this.value)" 
+                    placeholder="ลองพิมพ์คำตอบสั้นๆ เพื่อทดสอบความจำก่อนเปิดดูเฉลย..." 
+                    class="w-full p-3 rounded-xl border border-slate-200 bg-slate-50/70 text-xs sm:text-sm font-sarabun text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all leading-relaxed"
+                  >${this.escapeHtml(savedDraft)}</textarea>
+                </div>
+
+                <!-- Toggle Model Answer Button -->
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                  <button onclick="app.toggleWrittenAnswer('${item.id}')" class="px-3.5 py-2 rounded-xl text-xs font-prompt font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs active:scale-95">
+                    <i data-lucide="${isOpen ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4 text-rose-600"></i>
+                    <span>${isOpen ? 'ซ่อนแนวคำตอบ & เกณฑ์คะแนน' : 'ดูแนวคำตอบ & เกณฑ์คะแนน'}</span>
+                  </button>
+                  <div class="flex items-center gap-1.5">
+                    <button onclick="app.askAIAboutWritten('${item.id}')" class="px-3 py-1.5 rounded-xl text-xs font-prompt font-medium bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors flex items-center gap-1" title="ให้อาจารย์กาชาด AI ขยายความข้อนี้">
+                      <i data-lucide="bot" class="w-3.5 h-3.5 text-purple-600"></i>
+                      <span class="hidden sm:inline">ถามอาจารย์ AI</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Model Answer Container -->
+                <div id="answer-${item.id}" class="${isOpen ? '' : 'hidden'} space-y-3 pt-3 border-t border-slate-100 animate-fadeIn">
+                  <!-- Model Answer Box -->
+                  <div class="p-4 rounded-xl bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/30 border border-emerald-200 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-1.5 font-prompt font-bold text-emerald-900 text-xs sm:text-sm">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                        <span>แนวคำตอบมาตรฐาน (สั้นกระชับ ข้อมูลครบถ้วน):</span>
+                      </div>
+                      <button onclick="app.copyAnswerText('${item.id}')" class="text-emerald-700 hover:text-emerald-900 text-xs font-prompt font-medium flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-emerald-100/60 transition-colors">
+                        <i data-lucide="copy" class="w-3 h-3"></i>
+                        <span>คัดลอก</span>
+                      </button>
+                    </div>
+                    <div class="text-xs sm:text-sm font-sarabun text-slate-800 leading-relaxed space-y-2" id="answer-text-${item.id}">
+                      ${item.modelAnswer}
+                    </div>
+                  </div>
+
+                  <!-- Scoring Criteria Box -->
+                  <div class="p-3 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-950 text-xs font-sarabun space-y-1">
+                    <div class="font-prompt font-bold text-amber-900 flex items-center gap-1.5">
+                      <i data-lucide="award" class="w-3.5 h-3.5 text-amber-600"></i>
+                      <span>เกณฑ์การให้คะแนน (Scoring Rubric):</span>
+                    </div>
+                    <p class="leading-relaxed text-amber-900/90">${this.escapeHtml(item.keyCriteria || '')}</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        lucide.createIcons();
+      }
+
+      toggleWrittenAnswer(qId) {
+        if (!this.writtenOpenAnswers) this.writtenOpenAnswers = {};
+        this.writtenOpenAnswers[qId] = !this.writtenOpenAnswers[qId];
+        const el = document.getElementById('answer-' + qId);
+        if (el) {
+          if (this.writtenOpenAnswers[qId]) {
+            el.classList.remove('hidden');
+          } else {
+            el.classList.add('hidden');
+          }
+        }
+        // Update toggle button icon/text
+        const card = document.getElementById('card-' + qId);
+        if (card) {
+          const btn = card.querySelector('button[onclick*="toggleWrittenAnswer"]');
+          if (btn) {
+            const isOpen = this.writtenOpenAnswers[qId];
+            btn.innerHTML = `
+              <i data-lucide="${isOpen ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4 text-rose-600"></i>
+              <span>${isOpen ? 'ซ่อนแนวคำตอบ & เกณฑ์คะแนน' : 'ดูแนวคำตอบ & เกณฑ์คะแนน'}</span>
+            `;
+            lucide.createIcons();
+          }
+        }
+      }
+
+      toggleAllWrittenAnswers(isOpen) {
+        if (!this.writtenOpenAnswers) this.writtenOpenAnswers = {};
+        if (typeof OFFICIAL_EXAM_PAPER !== 'undefined' && OFFICIAL_EXAM_PAPER.subjectiveAndMath) {
+          OFFICIAL_EXAM_PAPER.subjectiveAndMath.forEach(q => {
+            this.writtenOpenAnswers[q.id] = isOpen;
+          });
+        }
+        this.renderWrittenExam();
+      }
+
+      saveWrittenDraft(qId, val) {
+        try {
+          localStorage.setItem('trc_written_scratch_' + qId, val);
+          const st = document.getElementById('scratch-status-' + qId);
+          if (st) {
+            st.innerText = val ? '✓ บันทึกร่างแล้ว' : 'ยังไม่ได้พิมพ์';
+            st.className = val ? 'text-[11px] text-emerald-600 font-medium' : 'text-[11px] text-slate-400';
+          }
+        } catch (e) {
+          console.warn('LocalStorage error:', e);
+        }
+      }
+
+      copyAnswerText(qId) {
+        if (typeof OFFICIAL_EXAM_PAPER === 'undefined') return;
+        const item = OFFICIAL_EXAM_PAPER.subjectiveAndMath.find(q => q.id === qId);
+        if (!item) return;
+        const cleanText = item.modelAnswer.replace(/<[^>]*>/g, '').trim();
+        navigator.clipboard.writeText(cleanText).then(() => {
+          alert('✅ คัดลอกแนวคำตอบเรียบร้อยแล้ว');
+        }).catch(() => {
+          prompt('คัดลอกข้อความด้านล่าง:', cleanText);
+        });
+      }
+
+      askAIAboutWritten(qId) {
+        if (typeof OFFICIAL_EXAM_PAPER === 'undefined') return;
+        const item = OFFICIAL_EXAM_PAPER.subjectiveAndMath.find(q => q.id === qId);
+        if (!item) return;
+        this.toggleAICoachDrawer(true);
+        this.switchCoachTab('chat');
+        const prompt = `ช่วยอธิบายและขยายความข้อสอบข้อนี้ให้เข้าใจง่าย: "${item.question}"`;
+        this.sendCoachPrompt(prompt);
+      }
+
+      startOfficialMCExam() {
+        if (typeof OFFICIAL_EXAM_PAPER === 'undefined' || !OFFICIAL_EXAM_PAPER.multipleChoice) {
+          alert('ไม่พบชุดข้อสอบจริงในระบบ');
+          return;
+        }
+        this.isOfficialExamMode = true;
+        this.startExam('official_paper', OFFICIAL_EXAM_PAPER.multipleChoice);
+      }
+
+      // ==========================================
       // 4. PROGRESSIVE WEB APP (PWA) METHODS
       // Mobile Install & Offline Service Worker
       // ==========================================
@@ -3851,12 +4370,13 @@
       // Intelligent Diagnostic & Interactive Tutor
       // ==========================================
 
-      toggleAICoachDrawer() {
+      toggleAICoachDrawer(forceOpen) {
         const drawer = document.getElementById('drawer-ai-coach');
         if (!drawer) return;
         const isHidden = drawer.classList.contains('hidden');
+        const shouldOpen = forceOpen !== undefined ? forceOpen : isHidden;
         const drawerContent = drawer.querySelector('div');
-        if (isHidden) {
+        if (shouldOpen) {
           drawer.classList.remove('hidden');
           if (window.visualViewport && drawerContent) {
             drawerContent.style.height = `${window.visualViewport.height}px`;
@@ -4417,9 +4937,29 @@
 
       findMatchingQuestion(userQuery) {
         const raw = (userQuery || '').trim();
-        if (!raw || !this.questionsPool || this.questionsPool.length === 0) return null;
+        if (!raw) return null;
         const lowerRaw = raw.toLowerCase();
         const qClean = lowerRaw.replace(/^(?:ข้อ(?:ที่)?|no\.?|[0-9]+)[\.\:\s\-]*/i, '').trim();
+
+        // 0. Check in OFFICIAL_EXAM_PAPER (Subjective & Math questions)
+        if (typeof OFFICIAL_EXAM_PAPER !== 'undefined' && OFFICIAL_EXAM_PAPER.subjectiveAndMath) {
+          // Check by number match (e.g. "ข้อ 72", "72", "ข้อ 73")
+          const officialNumMatch = raw.match(/(?:ข้อ(?:ที่)?|no\.?)\s*(\d+)/i) || raw.match(/^(\d+)[\.\s]/);
+          if (officialNumMatch) {
+            const num = parseInt(officialNumMatch[1], 10);
+            const foundSub = OFFICIAL_EXAM_PAPER.subjectiveAndMath.find(q => q.number === num);
+            if (foundSub) return { match: foundSub, type: 'official_subjective' };
+            const foundMC = (OFFICIAL_EXAM_PAPER.multipleChoice || []).find(q => q.number === num);
+            if (foundMC) return { match: foundMC, type: 'official_mc' };
+          }
+
+          // Check by content substring match
+          const subMatch = OFFICIAL_EXAM_PAPER.subjectiveAndMath.find(q => {
+            const cleanQ = q.question.toLowerCase();
+            return cleanQ.includes(qClean) || (qClean.length >= 6 && cleanQ.includes(qClean));
+          });
+          if (subMatch) return { match: subMatch, type: 'official_subjective' };
+        }
 
         // 1. Exact match with question string
         let match = this.questionsPool.find(q => q.question.toLowerCase().trim() === lowerRaw);
@@ -4636,10 +5176,124 @@
           return this.formatCapabilityIntro();
         }
 
-        // 2. Direct question matching from 761 questions database
+        // 2. Direct question matching from 761 questions database + Official Exam Paper
         const qMatch = this.findMatchingQuestion(query);
         if (qMatch && qMatch.match) {
+          if (qMatch.type === 'official_subjective') {
+            const item = qMatch.match;
+            return `
+              <div class="space-y-3 font-sarabun text-xs">
+                <div class="flex items-center gap-1.5 text-[11px] font-prompt font-semibold text-rose-700">
+                  <span class="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 flex items-center gap-1">
+                    ⭐ <span>ข้อสอบจริง 11 หน้า (ข้อที่ ${item.number} • ${item.score} คะแนน)</span>
+                  </span>
+                  <span class="text-slate-500 font-normal truncate">${this.escapeHtml(item.category)}</span>
+                </div>
+                <p class="font-prompt font-bold text-slate-900 text-sm leading-snug">${this.escapeHtml(item.question)}</p>
+                
+                <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-slate-800 space-y-1.5 leading-relaxed">
+                  <div class="font-prompt font-bold text-emerald-900 flex items-center gap-1">
+                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i> แนวคำตอบมาตรฐาน (สั้นกระชับ ข้อมูลครบถ้วน):
+                  </div>
+                  <div>${item.modelAnswer}</div>
+                </div>
+
+                <div class="p-2.5 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 font-prompt text-[11px]">
+                  💡 <strong>เกณฑ์การให้คะแนน:</strong> ${this.escapeHtml(item.keyCriteria || '')}
+                </div>
+              </div>
+            `;
+          }
           return this.formatQuestionAnswer(qMatch);
+        }
+
+        // 2.2 Fast-Path Q&A for High-Yield Official Exam Topics
+        if (/vat|ภาษีมูลค่าเพิ่ม|ถอด vat|ราคาต่อชิ้น|ข้อ 72/i.test(q)) {
+          return `
+            <div class="space-y-2 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                📌 สูตรถอด VAT 7% หาราคาต่อชิ้นก่อน VAT (ข้อ 72 ข้อสอบจริง)
+              </p>
+              <div class="p-3 bg-indigo-50/80 rounded-xl border border-indigo-200 space-y-1.5 leading-relaxed">
+                <div><strong>1. ราคารวม VAT ต่อ 1 ชิ้น:</strong> 1,000,000 บาท ÷ 10 ชิ้น = <strong>100,000 บาท</strong></div>
+                <div><strong>2. สูตรถอด VAT 7%:</strong> ราคาก่อน VAT = ราคารวม VAT ÷ 1.07</div>
+                <div>= 100,000 ÷ 1.07 = <span class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded font-bold font-mono">93,457.94 บาท/ชิ้น</span></div>
+              </div>
+              <p class="text-[11px] text-slate-500">ตอบ 93,457.94 บาท (ภาษีมูลค่าเพิ่ม 7% เท่ากับ 6,542.06 บาท)</p>
+            </div>
+          `;
+        }
+
+        if (/cost saving|เปอร์เซ็นต์ประหยัด|ลดค่าใช้จ่าย|จ้างทำความสะอาด|ข้อ 73/i.test(q)) {
+          return `
+            <div class="space-y-2 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                📌 สูตรคำนวณ %Cost Saving (ข้อ 73 ข้อสอบจริง)
+              </p>
+              <div class="p-3 bg-emerald-50/80 rounded-xl border border-emerald-200 space-y-1.5 leading-relaxed">
+                <div><strong>1. มูลค่าที่ลดได้:</strong> 10 ล้าน - 8.5 ล้าน = <strong>1.5 ล้านบาท</strong></div>
+                <div><strong>2. สูตร %Cost Saving:</strong> (จำนวนเงินที่ลดได้ ÷ สัญญาเดิม) × 100</div>
+                <div>= (1.5 ÷ 10) × 100 = <span class="text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-bold font-mono">15%</span></div>
+              </div>
+              <p class="text-[11px] text-slate-500">ตอบ ประหยัดค่าใช้จ่ายได้ 15%</p>
+            </div>
+          `;
+        }
+
+        if (/เช่าดำเนินงาน|เช่าซื้อ|operating lease|hire purchase/i.test(q)) {
+          return `
+            <div class="space-y-2 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                📌 ความแตกต่างระหว่าง สัญญาเช่าดำเนินงาน VS สัญญาเช่าซื้อ (ข้อ 36 ข้อสอบจริง)
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div class="p-2.5 bg-blue-50 rounded-xl border border-blue-200">
+                  <div class="font-prompt font-bold text-blue-900">1. เช่าดำเนินงาน (Operating Lease)</div>
+                  <div class="text-[11px] text-slate-600 mt-1">เน้นได้สิทธิการใช้ทรัพย์สิน ระยะสั้น ผู้ให้เช่าดูแลซ่อมบำรุง สิ้นสุดสัญญา<strong>ไม่โอนกรรมสิทธิ์</strong></div>
+                </div>
+                <div class="p-2.5 bg-purple-50 rounded-xl border border-purple-200">
+                  <div class="font-prompt font-bold text-purple-900">2. เช่าซื้อ (Hire Purchase)</div>
+                  <div class="text-[11px] text-slate-600 mt-1">สัญญาเช่าที่กรรมสิทธิ์ในทรัพย์สินจะ<strong>โอนตกเป็นของผู้เช่า</strong>เมื่อชำระเงินค่างวดครบถ้วน</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (/ความเร่งด่วน 3 ระดับ|3 ระดับความเร่งด่วน|ด่วนที่สุด ด่วนมาก/i.test(q)) {
+          return `
+            <div class="space-y-2 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                📌 ระดับความเร่งด่วนของหนังสือราชการ 3 ระดับ (ข้อ 42 & 52 ข้อสอบจริง)
+              </p>
+              <div class="p-3 bg-rose-50/80 rounded-xl border border-rose-200 space-y-1.5 leading-relaxed">
+                <div>1. <strong>ด่วนที่สุด</strong> : ให้เจ้าหน้าที่ปฏิบัติในทันทีที่ได้รับหนังสือนั้น</div>
+                <div>2. <strong>ด่วนมาก</strong> : ให้เจ้าหน้าที่ปฏิบัติโดยเร็ว</div>
+                <div>3. <strong>ด่วน</strong> : ให้เจ้าหน้าที่ปฏิบัติเร็วกว่าปกติ เท่าที่จะทำได้</div>
+              </div>
+              <div class="p-2 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 text-[11px]">
+                💡 <strong>จุดสังเกต:</strong> ระบุด้วยตัวอักษรสีแดงขนาดไม่เล็กกว่า <strong>32 พอยท์</strong> บนกึ่งกลางด้านบนของตัวหนังสือ
+              </div>
+            </div>
+          `;
+        }
+
+        if (/6r|6 r|หลัก 6r/i.test(q)) {
+          return `
+            <div class="space-y-2 font-sarabun text-xs">
+              <p class="font-prompt font-bold text-slate-900 text-sm">
+                📌 หลัก 6R ในการจัดหาพัสดุ (ข้อ 33 ข้อสอบจริง)
+              </p>
+              <div class="grid grid-cols-2 gap-1.5 p-3 bg-slate-50 rounded-xl border border-slate-200 text-[11px]">
+                <div>1. <strong>Right Quality</strong> (คุณภาพถูกต้อง)</div>
+                <div>2. <strong>Right Quantity</strong> (ปริมาณถูกต้อง)</div>
+                <div>3. <strong>Right Price</strong> (ราคาถูกต้องเหมาะสม)</div>
+                <div>4. <strong>Right Time</strong> (เวลาถูกต้องตรงกำหนด)</div>
+                <div>5. <strong>Right Place</strong> (สถานที่ส่งมอบถูกต้อง)</div>
+                <div>6. <strong>Right Source</strong> (แหล่งผู้ขายที่เชื่อถือได้)</div>
+              </div>
+            </div>
+          `;
         }
 
         // 2.5 Direct Fast-Path Q&A (ตอบตรงประเด็นทันทีใน 1 ประโยค)
