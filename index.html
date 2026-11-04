@@ -3766,8 +3766,14 @@
       // ==========================================
       initShutdownNotice() {
         const STORAGE_KEY = 'trc_shutdown_notice_ack';
-        if (localStorage.getItem(STORAGE_KEY) === 'true') {
-          return; // Acknowledged already, never show again
+        const hasAckLocal = localStorage.getItem(STORAGE_KEY) === 'true';
+        const hasAckCookie = document.cookie.split(';').some(item => item.trim().startsWith('trc_shutdown_notice_ack=true'));
+
+        if (hasAckLocal || hasAckCookie) {
+          // เคยกดรับทราบแล้ว ลบ element ทิ้งทันที ไม่ให้คงค้างในหน้าเว็บ
+          const modal = document.getElementById('modal-shutdown-notice');
+          if (modal) modal.remove();
+          return;
         }
 
         const modal = document.getElementById('modal-shutdown-notice');
@@ -3812,14 +3818,21 @@
       }
 
       acknowledgeShutdownNotice() {
-        localStorage.setItem('trc_shutdown_notice_ack', 'true');
+        // บันทึกทั้งใน localStorage และ Cookie ระยะยาว
+        try {
+          localStorage.setItem('trc_shutdown_notice_ack', 'true');
+          document.cookie = "trc_shutdown_notice_ack=true; path=/; max-age=31536000; SameSite=Lax";
+        } catch(e) {}
+
         if (this.shutdownInterval) {
           clearInterval(this.shutdownInterval);
           this.shutdownInterval = null;
         }
+
+        // ลบ DOM element ออกจากหน้าเว็บไปเลยอย่างถาวร
         const modal = document.getElementById('modal-shutdown-notice');
         if (modal) {
-          modal.classList.add('hidden');
+          modal.remove();
         }
       }
 
