@@ -1274,14 +1274,14 @@
         <div id="pinn-drill-container" class="space-y-4">
           <!-- Injected dynamically from renderPinnDrill() -->
         </div>
-      
+      </div>
 
       <!-- 5. EXCEL 100 EXAM SUITE (คลังข้อสอบ Excel 100 ข้อ พร้อมตารางจำลองและพิมพ์สูตร) -->
       <div id="pinn-view-excel" class="hidden space-y-4">
         <div id="pinn-excel-container" class="space-y-4">
           <!-- Injected dynamically from renderExcelExam() -->
         </div>
-      </div></div>
+      </div>
     </section>
 
     <!-- 8. ARCADE MINI-GAME SCREEN (มินิเกมประลองสปีดตัดชอยส์) -->
@@ -3755,7 +3755,7 @@
         else if (tabName === 'projects') this.renderPinnProjects();
         else if (tabName === 'quiz') this.renderPinnQuiz();
         else if (tabName === 'drill') this.renderPinnDrill();
-        else if (tabName === 'excel') this.renderExcelExam();
+        else if (tabName === 'excel') this.initExcelExam();
 
         lucide.createIcons();
       }
@@ -4586,6 +4586,11 @@
       renderExcelExam() {
         const container = document.getElementById('pinn-excel-container');
         if (!container) return;
+
+        if (!this.excelExamState) {
+          this.initExcelExam();
+          return;
+        }
 
         if (typeof EXCEL_EXAM_DATA === 'undefined' || !EXCEL_EXAM_DATA.questions || EXCEL_EXAM_DATA.questions.length === 0) {
           container.innerHTML = `
