@@ -1194,19 +1194,23 @@
           </div>
         </div>
 
-        <!-- Segmented Tab Switcher (3 Tabs: ข้อสอบ 7 ข้อ, 6 โครงการฝึกทำ, ควิซปรนัย) -->
+        <!-- Segmented Tab Switcher (4 Tabs: ข้อสอบ 7 ข้อ, 6 โครงการฝึกทำ, ควิซปรนัย, ปั๊มความจำ 100 ข้อ) -->
         <div class="flex p-1 bg-amber-100/70 rounded-2xl gap-1 text-xs font-prompt font-bold overflow-x-auto no-scrollbar">
-          <button id="pinn-tab-btn-theory" onclick="app.setPinnTab('theory')" class="flex-1 min-w-[130px] sm:min-w-0 py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-xs cursor-pointer whitespace-nowrap">
+          <button id="pinn-tab-btn-theory" onclick="app.setPinnTab('theory')" class="flex-1 min-w-[125px] sm:min-w-0 py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-xs cursor-pointer whitespace-nowrap">
             <span>📖</span>
-            <span>1. ข้อสอบ 7 ข้อ + เฉลย</span>
+            <span>1. ข้อสอบ 7 ข้อ</span>
           </button>
-          <button id="pinn-tab-btn-projects" onclick="app.setPinnTab('projects')" class="flex-1 min-w-[160px] sm:min-w-0 py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 cursor-pointer whitespace-nowrap">
+          <button id="pinn-tab-btn-projects" onclick="app.setPinnTab('projects')" class="flex-1 min-w-[145px] sm:min-w-0 py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 cursor-pointer whitespace-nowrap">
             <span>💡</span>
-            <span>2. 6 โครงการฝึกแผน (อัตนัย)</span>
+            <span>2. 6 โครงการ (อัตนัย)</span>
           </button>
-          <button id="pinn-tab-btn-quiz" onclick="app.setPinnTab('quiz')" class="flex-1 min-w-[130px] sm:min-w-0 py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 cursor-pointer whitespace-nowrap">
+          <button id="pinn-tab-btn-quiz" onclick="app.setPinnTab('quiz')" class="flex-1 min-w-[115px] sm:min-w-0 py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 cursor-pointer whitespace-nowrap">
             <span>⚡</span>
-            <span>3. ปรนัยเช็กความเข้าใจ (7 ข้อ)</span>
+            <span>3. ปรนัย (7 ข้อ)</span>
+          </button>
+          <button id="pinn-tab-btn-drill" onclick="app.setPinnTab('drill')" class="flex-1 min-w-[175px] sm:min-w-0 py-2.5 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-amber-950 bg-gradient-to-r from-amber-200/80 to-orange-200/80 hover:from-amber-300 hover:to-orange-300 border border-amber-300 shadow-2xs cursor-pointer whitespace-nowrap font-bold">
+            <span class="animate-pulse">🔥</span>
+            <span>4. ปั๊มความจำ (100 แต้ม)</span>
           </button>
         </div>
       </div>
@@ -1250,6 +1254,13 @@
         </div>
         <div id="pinn-quiz-container" class="space-y-4">
           <!-- Injected dynamically from PLAN_EXAM_DATA.multipleChoice -->
+        </div>
+      </div>
+
+      <!-- TAB 4: TYPING DRILL (พิมพ์ตอบวนลูปปั๊ม 100 ข้อ) -->
+      <div id="pinn-view-drill" class="hidden space-y-4">
+        <div id="pinn-drill-container" class="space-y-4">
+          <!-- Injected dynamically from renderPinnDrill() -->
         </div>
       </div>
     </section>
@@ -3692,25 +3703,32 @@
         const vTheory = document.getElementById('pinn-view-theory');
         const vProj = document.getElementById('pinn-view-projects');
         const vQuiz = document.getElementById('pinn-view-quiz');
+        const vDrill = document.getElementById('pinn-view-drill');
 
         const btnTheory = document.getElementById('pinn-tab-btn-theory');
         const btnProj = document.getElementById('pinn-tab-btn-projects');
         const btnQuiz = document.getElementById('pinn-tab-btn-quiz');
+        const btnDrill = document.getElementById('pinn-tab-btn-drill');
 
-        const activeCls = 'flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-xs cursor-pointer font-bold';
-        const inactiveCls = 'flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 cursor-pointer font-medium';
+        const activeCls = 'flex-1 min-w-[125px] sm:min-w-0 py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-xs cursor-pointer font-bold whitespace-nowrap';
+        const inactiveCls = 'flex-1 min-w-[125px] sm:min-w-0 py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 cursor-pointer font-medium whitespace-nowrap';
+        const drillActiveCls = 'flex-1 min-w-[175px] sm:min-w-0 py-2.5 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md cursor-pointer font-extrabold whitespace-nowrap';
+        const drillInactiveCls = 'flex-1 min-w-[175px] sm:min-w-0 py-2.5 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-amber-950 bg-gradient-to-r from-amber-200/80 to-orange-200/80 hover:from-amber-300 hover:to-orange-300 border border-amber-300 shadow-2xs cursor-pointer font-bold whitespace-nowrap';
 
         if (vTheory) vTheory.classList.toggle('hidden', tabName !== 'theory');
         if (vProj) vProj.classList.toggle('hidden', tabName !== 'projects');
         if (vQuiz) vQuiz.classList.toggle('hidden', tabName !== 'quiz');
+        if (vDrill) vDrill.classList.toggle('hidden', tabName !== 'drill');
 
         if (btnTheory) btnTheory.className = tabName === 'theory' ? activeCls : inactiveCls;
         if (btnProj) btnProj.className = tabName === 'projects' ? activeCls : inactiveCls;
         if (btnQuiz) btnQuiz.className = tabName === 'quiz' ? activeCls : inactiveCls;
+        if (btnDrill) btnDrill.className = tabName === 'drill' ? drillActiveCls : drillInactiveCls;
 
         if (tabName === 'theory') this.renderPinnTheory();
         else if (tabName === 'projects') this.renderPinnProjects();
         else if (tabName === 'quiz') this.renderPinnQuiz();
+        else if (tabName === 'drill') this.renderPinnDrill();
 
         lucide.createIcons();
       }
@@ -4149,6 +4167,350 @@
       resetPinnQuiz() {
         this.pinnQuizAnswers = {};
         this.renderPinnQuiz();
+      }
+
+      initPinnDrill(forceReset = false) {
+        if (!forceReset && this.pinnDrillInitialized && this.pinnDrillQueue && this.pinnDrillQueue.length > 0) {
+          return;
+        }
+        const pool = (typeof PLAN_EXAM_DATA !== 'undefined' && PLAN_EXAM_DATA.typingDrill) ? PLAN_EXAM_DATA.typingDrill : [];
+        if (pool.length === 0) return;
+
+        this.pinnDrillQueue = shuffleArray([...pool]);
+        this.pinnDrillCurrentIdx = 0;
+        this.pinnDrillScore = 0;
+        this.pinnDrillStreak = 0;
+        this.pinnDrillBestStreak = 0;
+        this.pinnDrillTotalAttempts = 0;
+        this.pinnDrillShowHint = false;
+        this.pinnDrillCorrectionMode = false;
+        this.pinnDrillLastState = null;
+        this.pinnDrillInitialized = true;
+      }
+
+      renderPinnDrill() {
+        const container = document.getElementById('pinn-drill-container');
+        if (!container || typeof PLAN_EXAM_DATA === 'undefined') return;
+
+        this.initPinnDrill();
+        const pool = PLAN_EXAM_DATA.typingDrill || [];
+        if (pool.length === 0) {
+          container.innerHTML = '<div class="p-8 text-center text-slate-500 font-sarabun">ไม่พบชุดคำถาม Drill</div>';
+          return;
+        }
+
+        const score = this.pinnDrillScore || 0;
+        const targetScore = 100;
+        const progressPercent = Math.min(100, Math.round((score / targetScore) * 100));
+        const currentQ = this.pinnDrillQueue[this.pinnDrillCurrentIdx % this.pinnDrillQueue.length];
+        const streak = this.pinnDrillStreak || 0;
+        const total = this.pinnDrillTotalAttempts || 0;
+        const accuracy = total > 0 ? Math.round((score / total) * 100) : 100;
+        const isMaster = score >= targetScore;
+
+        container.innerHTML = `
+          <!-- Header & Progress Card -->
+          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-lg space-y-4 relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-xs text-xs font-prompt font-bold mb-1">
+                  <span>🔥</span> โหมดปั๊มความจำแบบพิมพ์ตอบวนลูป
+                </div>
+                <h3 class="font-prompt font-extrabold text-xl sm:text-2xl leading-tight">
+                  เป้าหมาย: สะสม 100 แต้มให้แม่นยำขึ้นใจ!
+                </h3>
+                <p class="text-xs sm:text-sm text-amber-100 font-sarabun">
+                  พิมพ์คีย์เวิร์ดเพื่อฝึก Active Recall ตอบผิดระบบจะส่งกลับมาวนซ้ำจนกว่าจะตอบถูก!
+                </p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="app.resetPinnDrill()" class="px-3.5 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-xs text-white text-xs font-prompt font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                  <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> เริ่มต้นใหม่
+                </button>
+              </div>
+            </div>
+
+            <!-- Score & Stats Bar -->
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center font-prompt">
+              <div class="p-2.5 rounded-2xl bg-white/15 backdrop-blur-xs">
+                <span class="text-[10px] text-amber-100 block">🏆 แต้มสะสม</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-white">${score} <span class="text-xs font-normal text-amber-200">/ 100</span></span>
+              </div>
+              <div class="p-2.5 rounded-2xl bg-white/15 backdrop-blur-xs">
+                <span class="text-[10px] text-amber-100 block">🔥 Combo Streak</span>
+                <span class="text-xl sm:text-2xl font-extrabold ${streak >= 3 ? 'text-yellow-300 animate-pulse' : 'text-white'}">${streak} <span class="text-xs font-normal text-amber-200">ข้อติด</span></span>
+              </div>
+              <div class="p-2.5 rounded-2xl bg-white/15 backdrop-blur-xs">
+                <span class="text-[10px] text-amber-100 block">🎯 ความแม่นยำ</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-white">${accuracy}%</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px] font-prompt text-amber-100 font-medium">
+                <span>ความก้าวหน้าสู่ 100 แต้ม</span>
+                <span>${progressPercent}%</span>
+              </div>
+              <div class="w-full h-3 bg-black/20 rounded-full overflow-hidden p-0.5">
+                <div class="h-full bg-gradient-to-r from-yellow-300 via-amber-200 to-white rounded-full transition-all duration-500 shadow-sm" style="width: ${progressPercent}%;"></div>
+              </div>
+            </div>
+          </div>
+
+          ${isMaster ? `
+            <!-- Master Celebration Card -->
+            <div class="p-6 rounded-3xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-xl text-center space-y-3 animate-scaleUp">
+              <span class="text-4xl block">🎉🏆👑</span>
+              <h3 class="font-prompt font-extrabold text-2xl">ยินดีด้วยอีปิ่น! ปั๊มครบ 100 แต้มสำเร็จแล้ว!</h3>
+              <p class="text-sm font-sarabun text-emerald-100 max-w-md mx-auto">
+                ความจำแม่นยำระดับท็อปฟอร์ม ลุยห้องสอบวันที่ 15 พ.ย. นี้ เขียนตอบฉลุยแน่นอน!
+              </p>
+              <button onclick="app.resetPinnDrill()" class="px-5 py-2.5 bg-white text-emerald-800 font-prompt font-bold rounded-xl text-sm shadow-md hover:bg-emerald-50 transition-all cursor-pointer">
+                เล่นปั๊มวนรอบใหม่อีกครั้ง
+              </button>
+            </div>
+          ` : ''}
+
+          <!-- Active Question Card -->
+          <div class="bg-white rounded-3xl border-2 border-amber-200/90 shadow-md p-5 sm:p-7 space-y-5 relative">
+            <!-- Question Top Meta -->
+            <div class="flex items-center justify-between gap-2 border-b border-amber-100 pb-3">
+              <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-prompt font-bold flex items-center gap-1.5">
+                <span>📌</span> ${this.escapeHtml(currentQ.category || 'ข้อสอบวิเคราะห์แผน')}
+              </span>
+              <span class="text-xs font-prompt text-slate-400 font-medium">
+                ข้อที่ ${(this.pinnDrillCurrentIdx + 1)} • ในคลัง ${this.pinnDrillQueue.length} ข้อ
+              </span>
+            </div>
+
+            <!-- Question Prompt -->
+            <div class="space-y-2">
+              <h4 class="font-sarabun font-bold text-slate-900 text-base sm:text-lg leading-relaxed">
+                ${this.formatDrillPrompt(currentQ.question)}
+              </h4>
+            </div>
+
+            <!-- Hint Box (if toggled) -->
+            ${this.pinnDrillShowHint ? `
+              <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300/80 text-xs sm:text-sm font-sarabun text-amber-950 flex items-start gap-2 animate-fadeIn">
+                <span class="text-base">💡</span>
+                <div>
+                  <strong>คำใบ้:</strong> ${this.escapeHtml(currentQ.hint)}
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- Feedback / Retype Box (if answered) -->
+            ${this.renderDrillFeedback(currentQ)}
+
+            <!-- Typing Form -->
+            <form onsubmit="event.preventDefault(); app.submitPinnDrill();" class="space-y-4">
+              <div class="space-y-1.5">
+                <label for="pinn-drill-input" class="block text-xs font-prompt font-bold text-slate-700">
+                  ${this.pinnDrillCorrectionMode 
+                    ? '✍️ พิมพ์คำตอบที่ถูกต้อง 1 ครั้งเพื่อจำฝังหัว:' 
+                    : '⌨️ พิมพ์คำตอบของคุณลงในช่องนี้ (กด Enter เพื่อส่ง):'}
+                </label>
+                <div class="relative flex items-center">
+                  <input
+                    type="text"
+                    id="pinn-drill-input"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    enterkeyhint="send"
+                    placeholder="${this.pinnDrillCorrectionMode ? 'พิมพ์คำตอบที่ถูกต้อง: ' + this.escapeHtml(currentQ.correctDisplay) : 'พิมพ์คีย์เวิร์ดคำตอบที่นี่...'}"
+                    class="w-full px-4 py-3.5 text-base sm:text-lg font-prompt font-semibold rounded-2xl border-2 transition-all shadow-inner focus:outline-none ${
+                      this.pinnDrillCorrectionMode 
+                        ? 'border-amber-400 bg-amber-50/50 text-amber-950 focus:ring-4 focus:ring-amber-200 focus:border-amber-500' 
+                        : 'border-slate-300 bg-slate-50/80 text-slate-900 focus:bg-white focus:ring-4 focus:ring-amber-200 focus:border-amber-500'
+                    }"
+                  >
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center justify-between gap-2 pt-1 flex-wrap">
+                <div class="flex items-center gap-1.5">
+                  <button 
+                    type="button" 
+                    onclick="app.togglePinnDrillHint()" 
+                    class="px-3 py-2 rounded-xl text-xs font-prompt font-semibold border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-600"></i> คำใบ้
+                  </button>
+                  ${!this.pinnDrillCorrectionMode ? `
+                    <button 
+                      type="button" 
+                      onclick="app.giveUpPinnDrill()" 
+                      class="px-3 py-2 rounded-xl text-xs font-prompt font-semibold border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-500"></i> ดูเฉลย
+                    </button>
+                  ` : ''}
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <button 
+                    type="button" 
+                    onclick="app.skipPinnDrill()" 
+                    class="px-3 py-2 rounded-xl text-xs font-prompt font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                  >
+                    ข้ามข้อนี้
+                  </button>
+                  <button 
+                    type="submit" 
+                    class="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-prompt font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  >
+                    <span>${this.pinnDrillCorrectionMode ? 'ยืนยันเพื่อไปต่อ' : 'ตรวจคำตอบ (Enter)'}</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        `;
+
+        lucide.createIcons();
+
+        setTimeout(() => {
+          const inp = document.getElementById('pinn-drill-input');
+          if (inp) inp.focus();
+        }, 80);
+      }
+
+      formatDrillPrompt(text) {
+        if (!text) return '';
+        return this.escapeHtml(text).replace(/\[\s*\.{3,}\s*\]/g, '<span class="inline-block px-3 py-0.5 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 font-mono font-bold tracking-widest">[ . . . . . . . . ]</span>');
+      }
+
+      renderDrillFeedback(currentQ) {
+        if (!this.pinnDrillLastState) return '';
+        const { isCorrect, userAnswer } = this.pinnDrillLastState;
+
+        if (isCorrect) {
+          return `
+            <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-300 text-emerald-950 space-y-2 animate-scaleUp">
+              <div class="flex items-center gap-2 font-prompt font-bold text-sm sm:text-base text-emerald-800">
+                <span class="text-xl">🎉</span>
+                <span>ถูกต้องแม่นยำมาก! (+1 แต้ม)</span>
+              </div>
+              <p class="text-xs sm:text-sm font-sarabun text-slate-700 leading-relaxed">
+                <strong>คำอธิบาย:</strong> ${this.escapeHtml(currentQ.explanation)}
+              </p>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="p-4 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-950 space-y-2.5 animate-scaleUp">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5 font-prompt font-bold text-sm text-rose-800">
+                  <span class="text-lg">❌</span>
+                  <span>ยังไม่ถูกต้อง (คุณตอบ: "${this.escapeHtml(userAnswer || 'ยังไม่ได้ตอบ')}")</span>
+                </div>
+                <span class="text-[11px] font-prompt font-bold px-2 py-0.5 rounded-full bg-rose-200 text-rose-900">
+                  ส่งกลับวนซ้ำในลูป
+                </span>
+              </div>
+              <div class="p-3 rounded-xl bg-white border border-rose-200 space-y-1">
+                <p class="text-xs sm:text-sm font-prompt font-extrabold text-slate-900">
+                  🎯 เฉลยคำตอบที่ถูกต้อง: <span class="text-emerald-700 underline decoration-2">${this.escapeHtml(currentQ.correctDisplay)}</span>
+                </p>
+                <p class="text-xs sm:text-sm font-sarabun text-slate-600 leading-relaxed">
+                  💡 <strong>จำง่ายๆ:</strong> ${this.escapeHtml(currentQ.explanation)}
+                </p>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      submitPinnDrill() {
+        const inp = document.getElementById('pinn-drill-input');
+        if (!inp) return;
+        const val = inp.value.trim();
+        if (!val) return;
+
+        const currentQ = this.pinnDrillQueue[this.pinnDrillCurrentIdx % this.pinnDrillQueue.length];
+
+        if (this.pinnDrillCorrectionMode) {
+          this.pinnDrillCorrectionMode = false;
+          this.pinnDrillLastState = null;
+          this.pinnDrillShowHint = false;
+          this.pinnDrillCurrentIdx++;
+          this.renderPinnDrill();
+          return;
+        }
+
+        this.pinnDrillTotalAttempts = (this.pinnDrillTotalAttempts || 0) + 1;
+
+        const norm = (s) => (s || '').toString().toLowerCase().replace(/[\s\-_.,()]/g, '');
+        const userNorm = norm(val);
+        const isMatch = (currentQ.acceptedAnswers || []).some(ans => norm(ans) === userNorm);
+
+        if (isMatch) {
+          this.pinnDrillScore = (this.pinnDrillScore || 0) + 1;
+          this.pinnDrillStreak = (this.pinnDrillStreak || 0) + 1;
+          if (this.pinnDrillStreak > (this.pinnDrillBestStreak || 0)) {
+            this.pinnDrillBestStreak = this.pinnDrillStreak;
+          }
+          this.pinnDrillLastState = { isCorrect: true, userAnswer: val };
+          this.renderPinnDrill();
+
+          setTimeout(() => {
+            if (this.pinnDrillLastState && this.pinnDrillLastState.isCorrect) {
+              this.pinnDrillLastState = null;
+              this.pinnDrillShowHint = false;
+              this.pinnDrillCurrentIdx++;
+              this.renderPinnDrill();
+            }
+          }, 1100);
+        } else {
+          this.pinnDrillStreak = 0;
+          this.pinnDrillLastState = { isCorrect: false, userAnswer: val };
+          this.pinnDrillCorrectionMode = true;
+
+          // Push duplicate of currentQ back into queue at position currentIdx + 3
+          const insertPos = Math.min(this.pinnDrillQueue.length, this.pinnDrillCurrentIdx + 3);
+          this.pinnDrillQueue.splice(insertPos, 0, currentQ);
+
+          this.renderPinnDrill();
+        }
+      }
+
+      giveUpPinnDrill() {
+        const currentQ = this.pinnDrillQueue[this.pinnDrillCurrentIdx % this.pinnDrillQueue.length];
+        this.pinnDrillStreak = 0;
+        this.pinnDrillLastState = { isCorrect: false, userAnswer: '(ขอยอมแพ้ดูเฉลย)' };
+        this.pinnDrillCorrectionMode = true;
+
+        const insertPos = Math.min(this.pinnDrillQueue.length, this.pinnDrillCurrentIdx + 3);
+        this.pinnDrillQueue.splice(insertPos, 0, currentQ);
+
+        this.renderPinnDrill();
+      }
+
+      skipPinnDrill() {
+        this.pinnDrillLastState = null;
+        this.pinnDrillShowHint = false;
+        this.pinnDrillCorrectionMode = false;
+        this.pinnDrillCurrentIdx++;
+        this.renderPinnDrill();
+      }
+
+      togglePinnDrillHint() {
+        this.pinnDrillShowHint = !this.pinnDrillShowHint;
+        this.renderPinnDrill();
+      }
+
+      resetPinnDrill() {
+        this.initPinnDrill(true);
+        this.renderPinnDrill();
       }
 
 
