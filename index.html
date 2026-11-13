@@ -3811,7 +3811,7 @@
         const projects = PLAN_EXAM_DATA.projects || [];
         container.innerHTML = projects.map(p => {
           return `
-            <div class="bg-white rounded-3xl border-2 border-amber-200/90 shadow-sm hover:shadow-md transition-all overflow-hidden space-y-4 p-5 sm:p-6">
+            <div class="bg-white rounded-3xl border-2 border-amber-200/90 shadow-sm hover:shadow-md transition-all space-y-4 p-5 sm:p-6 relative">
               <!-- Project Header -->
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-100 pb-3">
                 <div class="space-y-1">
@@ -3825,7 +3825,7 @@
               </div>
 
               <!-- Quick Chat Box for Pinn -->
-              <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs sm:text-sm font-sarabun text-amber-950 flex items-start gap-2">
+              <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs sm:text-[13px] font-sarabun text-amber-950 flex items-start gap-2">
                 <span class="text-base">📢</span>
                 <div>
                   <strong>สรุปให้ฟังแบบบ้านๆ:</strong> ${this.escapeHtml(p.easyChat)}
@@ -3837,203 +3837,232 @@
                 <span class="text-xs font-prompt font-bold text-slate-700 flex items-center gap-1.5">
                   <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-rose-500"></i> ที่มาและสภาพปัญหา:
                 </span>
-                <p class="text-xs sm:text-sm font-sarabun text-slate-600 pl-5">
+                <p class="text-[13px] sm:text-[14px] font-sarabun text-slate-600 pl-5 leading-relaxed">
                   ${this.escapeHtml(p.background)}
                 </p>
               </div>
 
-              <!-- 7 Dimensions Application Grid with Interactive Tooltips & Enhanced Readability -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 text-sm sm:text-base font-sarabun">
+              <!-- 7 Dimensions Application Grid with Interactive Tooltips & Reduced Font Size (-2px) -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 text-[13px] sm:text-[14px] font-sarabun">
                 <!-- 1. Vision & Mission -->
-                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2.5">
+                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2 relative">
                   <div class="flex items-center justify-between gap-2 pb-2 border-b border-amber-100">
-                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-base">
+                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-[15px]">
                       <span>🌟</span> <span>1. วิสัยทัศน์ & พันธกิจ (Vision & Mission)</span>
                     </div>
                     <!-- Tooltip Pill -->
                     <div class="relative group cursor-pointer inline-flex items-center">
-                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs">
+                      <button type="button" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs cursor-pointer">
                         <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-800"></i> จุดประสงค์คืออะไร?
-                      </span>
+                      </button>
                       <!-- Tooltip Popup -->
-                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:block w-72 p-3.5 bg-slate-900/95 text-white text-xs sm:text-sm font-sarabun rounded-2xl shadow-2xl z-30 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
-                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs sm:text-sm">
+                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-72 p-3.5 bg-slate-900 text-white text-xs font-sarabun rounded-2xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs">
                           <span>🎯 จุดประสงค์แบบเข้าใจง่าย:</span>
                         </p>
                         <p><strong>พันธกิจ:</strong> ตอบว่า "ทุกวันนี้เกิดมาทำไม อยู่เพื่อช่วยใคร ทำหน้าที่อะไร"</p>
                         <p class="mt-1.5"><strong>วิสัยทัศน์:</strong> ตอบว่า "อีก 3-10 ปีข้างหน้า อยากเห็นองค์กรเติบโตยิ่งใหญ่ไปยืนอยู่จุดไหน"</p>
-                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900/95"></div>
+                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
                       </div>
                     </div>
                   </div>
-                  <div class="space-y-2 pt-1 text-slate-800 leading-relaxed text-sm sm:text-base">
+                  <div class="space-y-1.5 pt-1 text-slate-800 leading-relaxed text-[13px] sm:text-[14px]">
                     <p><strong class="text-amber-950 font-prompt font-bold">วิสัยทัศน์:</strong> ${this.escapeHtml(p.analysis.vision)}</p>
                     <p><strong class="text-amber-950 font-prompt font-bold">พันธกิจ:</strong> ${this.escapeHtml(p.analysis.mission)}</p>
                   </div>
                 </div>
 
                 <!-- 2. Action Plan -->
-                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2.5">
+                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2 relative">
                   <div class="flex items-center justify-between gap-2 pb-2 border-b border-amber-100">
-                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-base">
+                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-[15px]">
                       <span>📋</span> <span>2. แผนปฏิบัติการ (Action Plan)</span>
                     </div>
                     <!-- Tooltip Pill -->
                     <div class="relative group cursor-pointer inline-flex items-center">
-                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs">
+                      <button type="button" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs cursor-pointer">
                         <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-800"></i> จุดประสงค์คืออะไร?
-                      </span>
+                      </button>
                       <!-- Tooltip Popup -->
-                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:block w-72 p-3.5 bg-slate-900/95 text-white text-xs sm:text-sm font-sarabun rounded-2xl shadow-2xl z-30 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
-                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs sm:text-sm">
+                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-72 p-3.5 bg-slate-900 text-white text-xs font-sarabun rounded-2xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs">
                           <span>🎯 จุดประสงค์แบบเข้าใจง่าย:</span>
                         </p>
                         <p>แปลงไอเดียบนกระดาษมาเป็น <strong>"คู่มือลงมือทำจริง"</strong> กำหนดว่าใครทำ อะไร ที่ไหน เมื่อไหร่ และที่ห้ามลืมคือ <strong>"ประเมินความเสี่ยง + แผนสำรอง"</strong> เผื่อเกิดเหตุฉุกเฉิน</p>
-                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900/95"></div>
+                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
                       </div>
                     </div>
                   </div>
-                  <p class="text-slate-800 leading-relaxed pt-1 text-sm sm:text-base">${this.escapeHtml(p.analysis.actionPlan)}</p>
+                  <p class="text-slate-800 leading-relaxed pt-1 text-[13px] sm:text-[14px]">${this.escapeHtml(p.analysis.actionPlan)}</p>
                 </div>
 
                 <!-- 3. SMART KPI -->
-                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2.5">
+                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2 relative">
                   <div class="flex items-center justify-between gap-2 pb-2 border-b border-amber-100">
-                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-base">
+                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-[15px]">
                       <span>🎯</span> <span>3. ตัวชี้วัดตามหลัก SMART (KPI)</span>
                     </div>
                     <!-- Tooltip Pill -->
                     <div class="relative group cursor-pointer inline-flex items-center">
-                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs">
+                      <button type="button" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs cursor-pointer">
                         <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-800"></i> จุดประสงค์คืออะไร?
-                      </span>
+                      </button>
                       <!-- Tooltip Popup -->
-                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:block w-72 p-3.5 bg-slate-900/95 text-white text-xs sm:text-sm font-sarabun rounded-2xl shadow-2xl z-30 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
-                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs sm:text-sm">
+                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-72 p-3.5 bg-slate-900 text-white text-xs font-sarabun rounded-2xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs">
                           <span>🎯 จุดประสงค์แบบเข้าใจง่าย:</span>
                         </p>
-                        <p>มีไว้เป็น <strong>"ไม้บรรทัดวัดความสำเร็จที่ไม่เพ้อเจ้อ"</strong> ไม่ใช่บอกแค่ 'ดีขึ้น' แต่ต้องมีตัวเลขชัดเจน ท้าทายแต่ทำได้จริง และมีกำหนดเดดไลน์แน่นอน</p>
-                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900/95"></div>
+                        <p>มีไว้เป็น <strong>"ไม้บรรทัดวัดความสำเร็จที่ไม่เพ้อเจ้อ"</strong> ไม่ใช่บอกแค่ "ดีขึ้น" แต่ต้องมีตัวเลขชัดเจน ท้าทายแต่ทำได้จริง และมีกำหนดเดดไลน์แน่นอน</p>
+                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
                       </div>
                     </div>
                   </div>
                   <div class="p-3 rounded-xl bg-emerald-50/90 border border-emerald-300">
-                    <p class="text-emerald-900 font-bold leading-relaxed text-sm sm:text-base">${this.escapeHtml(p.analysis.smartKpi)}</p>
+                    <p class="text-emerald-900 font-bold leading-relaxed text-[13px] sm:text-[14px]">${this.escapeHtml(p.analysis.smartKpi)}</p>
                   </div>
                 </div>
 
-                <!-- 4. Logical Framework with granular tooltips -->
-                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2.5">
+                <!-- 4. Logical Framework with granular interactive tooltips -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2 relative">
                   <div class="flex items-center justify-between gap-2 pb-2 border-b border-amber-100">
-                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-base">
+                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-[15px]">
                       <span>📊</span> <span>4. Logical Framework (4 ตัวชี้วัด)</span>
                     </div>
                     <!-- Tooltip Pill -->
                     <div class="relative group cursor-pointer inline-flex items-center">
-                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs">
+                      <button type="button" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs cursor-pointer">
                         <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-800"></i> จุดประสงค์คืออะไร?
-                      </span>
+                      </button>
                       <!-- Tooltip Popup -->
-                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:block w-72 p-3.5 bg-slate-900/95 text-white text-xs sm:text-sm font-sarabun rounded-2xl shadow-2xl z-30 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
-                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs sm:text-sm">
+                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-72 p-3.5 bg-slate-900 text-white text-xs font-sarabun rounded-2xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs">
                           <span>🎯 จุดประสงค์แบบเข้าใจง่าย:</span>
                         </p>
-                        <p>ผังเหตุและผล (LogFrame) เชื่อมโยงเป็นลูกโซ่: <strong>ใส่ทรัพยากร (Input) $
-ightarrow$ เกิดผลผลิตทันที (Output) $
-ightarrow$ เกิดประโยชน์ต่อยอด (Outcome) $
-ightarrow$ นำไปสู่ผลกระทบยั่งยืนระยะยาว (Impact)</strong></p>
-                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900/95"></div>
+                        <p>ผังเหตุและผล (LogFrame) เชื่อมโยงเป็นลูกโซ่: <strong>ใส่ทรัพยากร (Input) &rarr; เกิดผลผลิตทันที (Output) &rarr; เกิดประโยชน์ต่อยอด (Outcome) &rarr; นำไปสู่ผลกระทบยั่งยืนระยะยาว (Impact)</strong></p>
+                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Granular Breakdown with larger fonts & badges -->
-                  <div class="space-y-2 pt-1 text-sm sm:text-base">
+                  <!-- Granular Breakdown with Instant Interactive Tooltips on Hover/Touch -->
+                  <div class="space-y-2 pt-1 text-[13px] sm:text-[14px]">
                     <!-- Input -->
-                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2">
-                      <span class="px-2 py-0.5 rounded-md bg-slate-200 text-slate-900 font-bold font-prompt text-xs shrink-0 cursor-help" title="Input คือ: ทรัพยากรที่เทลงไปเพื่อเริ่มงาน (เงิน คน อุปกรณ์ เทคโนโลยี)">
-                        Input ℹ️
-                      </span>
-                      <span class="text-slate-800 leading-relaxed">${this.escapeHtml(p.analysis.logFrame.input)}</span>
+                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2 relative">
+                      <div class="relative group shrink-0">
+                        <button type="button" class="px-2 py-0.5 rounded-md bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold font-prompt text-xs flex items-center gap-1 transition-colors cursor-pointer shadow-2xs">
+                          <span>Input</span> <i data-lucide="info" class="w-3.5 h-3.5 text-slate-700"></i>
+                        </button>
+                        <!-- Instant Tooltip Card -->
+                        <div class="absolute left-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-64 p-3 bg-slate-900 text-white text-xs font-sarabun rounded-xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                          <span class="font-prompt font-bold text-amber-300 text-xs mb-1">📦 Input (ปัจจัยนำเข้า):</span>
+                          <span>ทรัพยากรที่เทลงไปเพื่อเริ่มทำโครงการ เช่น เงินงบประมาณ, บุคลากร, ทีมแพทย์, อุปกรณ์ IoT, รถพยาบาล</span>
+                          <div class="absolute left-4 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
+                        </div>
+                      </div>
+                      <span class="text-slate-800 leading-relaxed text-[13px] sm:text-[14px]">${this.escapeHtml(p.analysis.logFrame.input)}</span>
                     </div>
 
                     <!-- Output -->
-                    <div class="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200 flex items-start gap-2">
-                      <span class="px-2 py-0.5 rounded-md bg-blue-200 text-blue-950 font-bold font-prompt text-xs shrink-0 cursor-help" title="Output คือ: ชิ้นงานหรือผลที่เสร็จออกมาทันทีหลังโครงการจบ (เช่น ได้แอป 1 ตัว, อบรมได้คน 50 คน)">
-                        Output ℹ️
-                      </span>
-                      <span class="text-slate-800 leading-relaxed">${this.escapeHtml(p.analysis.logFrame.output)}</span>
+                    <div class="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200 flex items-start gap-2 relative">
+                      <div class="relative group shrink-0">
+                        <button type="button" class="px-2 py-0.5 rounded-md bg-blue-200 hover:bg-blue-300 text-blue-950 font-bold font-prompt text-xs flex items-center gap-1 transition-colors cursor-pointer shadow-2xs">
+                          <span>Output</span> <i data-lucide="info" class="w-3.5 h-3.5 text-blue-800"></i>
+                        </button>
+                        <!-- Instant Tooltip Card -->
+                        <div class="absolute left-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-64 p-3 bg-slate-900 text-white text-xs font-sarabun rounded-xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                          <span class="font-prompt font-bold text-sky-300 text-xs mb-1">⚙️ Output (ผลผลิต):</span>
+                          <span>ชิ้นงานหรือผลงานรูปธรรมที่เสร็จทันทีหลังเสร็จงาน เช่น ได้ระบบแอป 1 ระบบ, รถติดตั้งอุปกรณ์ 20 คัน, ผ่านการอบรม 100 คน</span>
+                          <div class="absolute left-4 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
+                        </div>
+                      </div>
+                      <span class="text-slate-800 leading-relaxed text-[13px] sm:text-[14px]">${this.escapeHtml(p.analysis.logFrame.output)}</span>
                     </div>
 
                     <!-- Outcome -->
-                    <div class="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-start gap-2">
-                      <span class="px-2 py-0.5 rounded-md bg-emerald-200 text-emerald-950 font-bold font-prompt text-xs shrink-0 cursor-help" title="Outcome คือ: ประโยชน์หรือการเปลี่ยนแปลงที่ดีขึ้นเมื่อคนเอา Output ไปใช้งาน (เช่น คนมาบริจาคเลือดเพิ่ม, คนไข้รอดตายเพิ่ม)">
-                        Outcome ℹ️
-                      </span>
-                      <span class="text-slate-800 leading-relaxed font-medium">${this.escapeHtml(p.analysis.logFrame.outcome)}</span>
+                    <div class="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-start gap-2 relative">
+                      <div class="relative group shrink-0">
+                        <button type="button" class="px-2 py-0.5 rounded-md bg-emerald-200 hover:bg-emerald-300 text-emerald-950 font-bold font-prompt text-xs flex items-center gap-1 transition-colors cursor-pointer shadow-2xs">
+                          <span>Outcome</span> <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-800"></i>
+                        </button>
+                        <!-- Instant Tooltip Card -->
+                        <div class="absolute left-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-64 p-3 bg-slate-900 text-white text-xs font-sarabun rounded-xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                          <span class="font-prompt font-bold text-emerald-300 text-xs mb-1">🌟 Outcome (ผลลัพธ์/ประโยชน์):</span>
+                          <span>การเปลี่ยนแปลงที่ดีขึ้นเมื่อคนนำ Output ไปใช้จริง เช่น ผู้บริจาคเลือดประจำเพิ่ม 25%, อัตราการเสียชีวิตลดลง 40%</span>
+                          <div class="absolute left-4 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
+                        </div>
+                      </div>
+                      <span class="text-slate-800 leading-relaxed font-medium text-[13px] sm:text-[14px]">${this.escapeHtml(p.analysis.logFrame.outcome)}</span>
                     </div>
 
                     <!-- Impact -->
-                    <div class="p-2.5 rounded-xl bg-purple-50/70 border border-purple-200 flex items-start gap-2">
-                      <span class="px-2 py-0.5 rounded-md bg-purple-200 text-purple-950 font-bold font-prompt text-xs shrink-0 cursor-help" title="Impact คือ: ผลลัพธ์สูงสุดในระดับสังคมหรือประเทศระยะยาว 5-10 ปี (เช่น ความมั่นคงทางสาธารณสุข สภากาชาดเป็นที่พึ่งพาอันดับ 1)">
-                        Impact ℹ️
-                      </span>
-                      <span class="text-slate-800 leading-relaxed font-semibold">${this.escapeHtml(p.analysis.logFrame.impact)}</span>
+                    <div class="p-2.5 rounded-xl bg-purple-50/70 border border-purple-200 flex items-start gap-2 relative">
+                      <div class="relative group shrink-0">
+                        <button type="button" class="px-2 py-0.5 rounded-md bg-purple-200 hover:bg-purple-300 text-purple-950 font-bold font-prompt text-xs flex items-center gap-1 transition-colors cursor-pointer shadow-2xs">
+                          <span>Impact</span> <i data-lucide="info" class="w-3.5 h-3.5 text-purple-800"></i>
+                        </button>
+                        <!-- Instant Tooltip Card -->
+                        <div class="absolute left-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-64 p-3 bg-slate-900 text-white text-xs font-sarabun rounded-xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                          <span class="font-prompt font-bold text-purple-300 text-xs mb-1">🏆 Impact (ผลกระทบระยะยาว):</span>
+                          <span>ผลกระทบสูงสุดระดับประเทศ/สังคมใน 5-10 ปี เช่น ความมั่นคงทางสาธารณสุข ผู้ป่วยเข้าถึงเลือดปลอดภัยทุกวินาทีวิกฤต</span>
+                          <div class="absolute left-4 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
+                        </div>
+                      </div>
+                      <span class="text-slate-800 leading-relaxed font-semibold text-[13px] sm:text-[14px]">${this.escapeHtml(p.analysis.logFrame.impact)}</span>
                     </div>
                   </div>
                 </div>
 
                 <!-- 5. Monitoring & Evaluation -->
-                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2.5">
+                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2 relative">
                   <div class="flex items-center justify-between gap-2 pb-2 border-b border-amber-100">
-                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-base">
+                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-[15px]">
                       <span>🔍</span> <span>5. การติดตาม VS ประเมินผล (M&E)</span>
                     </div>
                     <!-- Tooltip Pill -->
                     <div class="relative group cursor-pointer inline-flex items-center">
-                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs">
+                      <button type="button" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs cursor-pointer">
                         <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-800"></i> จุดประสงค์คืออะไร?
-                      </span>
+                      </button>
                       <!-- Tooltip Popup -->
-                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:block w-72 p-3.5 bg-slate-900/95 text-white text-xs sm:text-sm font-sarabun rounded-2xl shadow-2xl z-30 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
-                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs sm:text-sm">
+                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-72 p-3.5 bg-slate-900 text-white text-xs font-sarabun rounded-2xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs">
                           <span>🎯 จุดประสงค์แบบเข้าใจง่าย:</span>
                         </p>
                         <p><strong>ติดตาม (Monitoring):</strong> ทำตอนลุยงานเพื่อควบคุมให้เป็นไปตามแผน แก้ปัญหาเฉพาะหน้าทันที</p>
                         <p class="mt-1.5"><strong>ประเมินผล (Evaluation):</strong> ทำเพื่อสรุปภาพรวม ตัดสินความสำเร็จ ความคุ้มค่า และถอดบทเรียน</p>
-                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900/95"></div>
+                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
                       </div>
                     </div>
                   </div>
-                  <p class="text-slate-800 leading-relaxed pt-1 text-sm sm:text-base">${this.escapeHtml(p.analysis.monitoringEvaluation)}</p>
+                  <p class="text-slate-800 leading-relaxed pt-1 text-[13px] sm:text-[14px]">${this.escapeHtml(p.analysis.monitoringEvaluation)}</p>
                 </div>
 
                 <!-- 6. Role of Planner -->
-                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2.5">
+                <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-amber-200/90 shadow-xs hover:border-amber-400 transition-all space-y-2 relative">
                   <div class="flex items-center justify-between gap-2 pb-2 border-b border-amber-100">
-                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-base">
+                    <div class="font-prompt font-extrabold text-slate-900 flex items-center gap-1.5 text-sm sm:text-[15px]">
                       <span>💼</span> <span>6. บทบาท จนท.วิเคราะห์นโยบายและแผน</span>
                     </div>
                     <!-- Tooltip Pill -->
                     <div class="relative group cursor-pointer inline-flex items-center">
-                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs">
+                      <button type="button" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-prompt font-bold hover:bg-amber-200 transition-colors shadow-2xs cursor-pointer">
                         <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-800"></i> จุดประสงค์คืออะไร?
-                      </span>
+                      </button>
                       <!-- Tooltip Popup -->
-                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:block w-72 p-3.5 bg-slate-900/95 text-white text-xs sm:text-sm font-sarabun rounded-2xl shadow-2xl z-30 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
-                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs sm:text-sm">
+                      <div class="absolute right-0 bottom-full mb-2 hidden group-hover:flex group-focus:flex flex-col w-72 p-3.5 bg-slate-900 text-white text-xs font-sarabun rounded-2xl shadow-2xl z-50 pointer-events-none leading-relaxed border border-slate-700 animate-fadeIn">
+                        <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs">
                           <span>🎯 จุดประสงค์แบบเข้าใจง่าย:</span>
                         </p>
                         <p>เป็น <strong>"สถาปนิกและผู้กำกับโครงการ"</strong>: เช็กความคุ้มค่าก่อนของบ เขียนโครงการให้รัดกุม คุมเงินให้ตรงเป้า ประสานงานทุกฝ่าย และปิดโครงการส่งมอบงานอย่างมีผลงาน</p>
-                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900/95"></div>
+                        <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900"></div>
                       </div>
                     </div>
                   </div>
                   <div class="p-3 rounded-xl bg-indigo-50/80 border border-indigo-200">
-                    <p class="text-indigo-950 font-bold leading-relaxed text-sm sm:text-base">${this.escapeHtml(p.analysis.plannerRole)}</p>
+                    <p class="text-indigo-950 font-bold leading-relaxed text-[13px] sm:text-[14px]">${this.escapeHtml(p.analysis.plannerRole)}</p>
                   </div>
                 </div>
-              </div>              </div>
+              </div>
             </div>
           `;
         }).join('');
