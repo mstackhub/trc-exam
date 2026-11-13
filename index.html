@@ -250,7 +250,7 @@
         </div>
 
         <p class="text-xs sm:text-sm text-amber-100/90 font-sarabun leading-relaxed">
-          คัดสรรเนื้อหาเน้นๆ: <strong>ข้อสอบอัตนัย 7 ข้อพร้อมเฉลย</strong> + <strong>3 โครงการสมมติกาชาดฝึกเขียนจริง</strong> + <strong>คำอธิบายแบบบ้านๆ เข้าใจทันที</strong> + <strong>ทริกช่วยจำสูตรเด็ด</strong> + <strong>มินิควิซปรนัยเช็กความแม่นยำ</strong>
+          คัดสรรเนื้อหาเน้นๆ: <strong>ข้อสอบอัตนัย 7 ข้อพร้อมเฉลย</strong> + <strong>6 โครงการสมมติกาชาดฝึกเขียนจริง (อัตนัยพร้อมเฉลย)</strong> + <strong>คำอธิบายแบบบ้านๆ เข้าใจทันที</strong> + <strong>ทริกช่วยจำสูตรเด็ด</strong> + <strong>มินิควิซปรนัยเช็กความแม่นยำ</strong>
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 font-prompt text-xs sm:text-sm font-bold">
@@ -260,7 +260,7 @@
           </button>
           <button onclick="app.showScreen('pinn'); app.setPinnTab('projects');" class="px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer">
             <span>💡</span>
-            <span>3 โครงการตัวอย่างฝึกทำ</span>
+            <span>6 โครงการฝึกทำ (อัตนัยพร้อมเฉลย)</span>
           </button>
           <button onclick="app.showScreen('pinn'); app.setPinnTab('quiz');" class="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer">
             <span>⚡</span>
@@ -1200,7 +1200,7 @@
           </button>
           <button id="pinn-tab-btn-projects" onclick="app.setPinnTab('projects')" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 cursor-pointer">
             <span>💡</span>
-            <span>2. 3 โครงการสมมติฝึกแผน</span>
+            <span>2. 6 โครงการสมมติฝึกแผน (อัตนัยพร้อมเฉลย)</span>
           </button>
           <button id="pinn-tab-btn-quiz" onclick="app.setPinnTab('quiz')" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 cursor-pointer">
             <span>⚡</span>
@@ -1227,7 +1227,7 @@
         <div class="bg-amber-50/70 border border-amber-200 p-4 rounded-2xl text-xs sm:text-sm font-sarabun text-amber-950 flex items-start gap-2.5">
           <span class="text-base">🎯</span>
           <div>
-            <strong>โจทย์ฝึกทำ 3 โครงการจริง:</strong> นำทฤษฎีทั้ง 7 ข้อมาสวมร่างกับ 3 ภารกิจหลักสภากาชาดไทย (โลหิต, กู้ภัย, ผู้สูงวัย) เพื่อให้อีปิ่นเห็นภาพจริงตอนเขียนตอบในห้องสอบ
+            <strong>โจทย์ฝึกทำ 6 โครงการจริง (อัตนัยพร้อมเฉลย):</strong> นำทฤษฎีทั้ง 7 ข้อมาสวมร่างกับ 6 ภารกิจสำคัญสภากาชาดไทย (โลหิต, กู้ภัย, ผู้สูงวัย, Telemedicine, ยุวกาชาด, คลังวัคซีน-เซรุ่ม) เพื่อให้อีปิ่นเห็นภาพจริงตอนเขียนตอบในห้องสอบ
           </div>
         </div>
         <div id="pinn-projects-container" class="space-y-4">
@@ -1589,7 +1589,7 @@
                 <span>ข้อสอบพิชิตใจ 15 พ.ย.</span>
                 <span class="px-1.5 py-0.2 bg-amber-500 text-white text-[9px] rounded-full font-extrabold">สำหรับอีปิ่น</span>
               </div>
-              <div class="text-[11px] text-amber-800 font-medium">ข้อสอบ 7 ข้อ + 3 โครงการ + ทริกบ้านๆ + ปรนัย</div>
+              <div class="text-[11px] text-amber-800 font-medium">ข้อสอบ 7 ข้อ + 6 โครงการ + ทริกบ้านๆ + ปรนัย</div>
             </div>
           </div>
           <i data-lucide="chevron-right" class="w-4 h-4 text-amber-600"></i>
@@ -3936,7 +3936,10 @@
                         <p class="font-prompt font-bold text-amber-300 mb-1 flex items-center gap-1 text-xs sm:text-sm">
                           <span>🎯 จุดประสงค์แบบเข้าใจง่าย:</span>
                         </p>
-                        <p>ผังเหตุและผล (LogFrame) เชื่อมโยงเป็นลูกโซ่: <strong>ใส่ทรัพยากร (Input) $ightarrow$ เกิดผลผลิตทันที (Output) $ightarrow$ เกิดประโยชน์ต่อยอด (Outcome) $ightarrow$ นำไปสู่ผลกระทบยั่งยืนระยะยาว (Impact)</strong></p>
+                        <p>ผังเหตุและผล (LogFrame) เชื่อมโยงเป็นลูกโซ่: <strong>ใส่ทรัพยากร (Input) $
+ightarrow$ เกิดผลผลิตทันที (Output) $
+ightarrow$ เกิดประโยชน์ต่อยอด (Outcome) $
+ightarrow$ นำไปสู่ผลกระทบยั่งยืนระยะยาว (Impact)</strong></p>
                         <div class="absolute right-6 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-slate-900/95"></div>
                       </div>
                     </div>

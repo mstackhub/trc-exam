@@ -1,4 +1,4 @@
-const CACHE_NAME = 'trc-exam-v21';
+const CACHE_NAME = 'trc-exam-v22';
 const STATIC_ASSETS = [
   './',
   './index.html',
